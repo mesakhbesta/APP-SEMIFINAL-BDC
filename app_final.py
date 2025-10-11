@@ -42,7 +42,7 @@ else:
 
 # fallback kalau gak ada
 if not APIFY_TOKENS:
-    st.warning("⚠️ Tidak ada APIFY_TOKENS ditemukan di secrets/env.")
+    st.warning("⚠️ Tidak ada APIFY_TOKENS ditemukan di secrets/en.")
 if not OPENAI_API_KEY:
     st.warning("⚠️ Tidak ada OPENAI_API_KEY ditemukan di secrets/env.")
 
@@ -232,12 +232,12 @@ def transcribe_audio(tmp_path):
 # ======================================================
 # 💬 SENTIMEN ANALISIS KOMENTAR (MODEL LOAD)
 # ======================================================
-tfidf = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Sentiment\tfidf_sentiment.joblib")
-xgb = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Sentiment\xgb_sentiment.joblib")
-lbl = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Sentiment\label_encoder_sentiment_xgb.pkl")
+tfidf = joblib.load(r"tfidf_sentiment.joblib")
+xgb = joblib.load(r"xgb_sentiment.joblib")
+lbl = joblib.load(r"label_encoder_sentiment_xgb.pkl")
 
 slang_dict = {}
-with open(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\Slang Dict\slang_dict_combined.txt", "r", encoding="utf-8") as f:
+with open(r"slang_dict_combined.txt", "r", encoding="utf-8") as f:
     for line in f:
         parts = line.strip().split(",")
         if len(parts) == 2:
@@ -267,7 +267,7 @@ def extract_reel_id(url: str) -> str | None:
 def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
     try:
         # === 1️⃣ Cek data komentar di Excel lokal ===
-        df = pd.read_excel(r"D:\LOMBA\BDC SEMIFINAL 2025\instagram_comments\Data Komentar.xlsx")
+        df = pd.read_excel(r"Data Komentar.xlsx")
         df["URL"] = df["URL"].astype(str)
         df["reel_id"] = df["URL"].apply(
             lambda x: re.search(r"/reel/([^/?]+)", x).group(1)
@@ -339,9 +339,9 @@ def analyze_sentiment_from_df(df_comments: pd.DataFrame) -> pd.DataFrame:
 
 @st.cache_resource(show_spinner=False)
 def load_aspect_model():
-    tfidf_aspek = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Aspek\tfidf_aspek.joblib")
-    xgb_aspek = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Aspek\xgb_aspek.joblib")
-    lbl_aspek = joblib.load(r"D:\LOMBA\BDC SEMIFINAL 2025\Sentiment dan Topic\XGboost Aspek\label_encoder_aspek_xgb.pkl")
+    tfidf_aspek = joblib.load(r"tfidf_aspek.joblib")
+    xgb_aspek = joblib.load(r"xgb_aspek.joblib")
+    lbl_aspek = joblib.load(r"label_encoder_aspek_xgb.pkl")
     return tfidf_aspek, xgb_aspek, lbl_aspek
 
 def analyze_aspect_from_df(df_comments: pd.DataFrame) -> pd.DataFrame:
@@ -1214,4 +1214,5 @@ with st.sidebar.expander("⚙️ Utilities", expanded=False):
 if page == "🎬 ReelTalk Analyzer":
     run_analyzer_page()
 else:
+
     run_looker_page()
