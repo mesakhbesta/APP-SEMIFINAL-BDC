@@ -42,9 +42,9 @@ else:
 
 # fallback kalau gak ada
 if not APIFY_TOKENS:
-    st.warning("⚠️ Tidak ada APIFY_TOKENS ditemukan di secrets/en.")
+    st.warning("⚠️ ")
 if not OPENAI_API_KEY:
-    st.warning("⚠️ Tidak ada OPENAI_API_KEY ditemukan di secrets/env.")
+    st.warning("⚠️ ")
 
 # Optional: aktifkan fallback scraping komentar via Apify
 try:
@@ -1216,3 +1216,4 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
