@@ -9,7 +9,6 @@ joblib
 openai
 apify-client
 selenium
-whisper
 soundfile
 pydub
 resampy
@@ -19,4 +18,17 @@ python-dotenv
 html5lib
 lxml
 beautifulsoup4
-pyaudioop
+streamlit
+selenium
+soundfile
+numpy
+requests
+openai-whisper
+resampy
+torch
+tqdm
+ffmpeg-python
+librosa
+pydub
+imageio
+imageio-ffmpeg
