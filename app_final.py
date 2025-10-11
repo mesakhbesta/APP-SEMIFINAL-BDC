@@ -941,7 +941,7 @@ def run_looker_page():
             horizontal=True,
             label_visibility="visible"
         )
-        iframe_height = 750 if "Terbuka" in view_mode else 1000
+        iframe_height = 850 if "Terbuka" in view_mode else 1000
 
     # === INFO CARD DENGAN AKSEN MERAH ===
     st.markdown("""
@@ -1216,4 +1216,5 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
