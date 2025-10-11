@@ -32,3 +32,4 @@ librosa
 pydub
 imageio
 imageio-ffmpeg
+xgboost
