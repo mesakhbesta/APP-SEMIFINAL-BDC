@@ -671,9 +671,9 @@ def run_analyzer_page():
     # 🔗 5️⃣ INPUT MANUAL / CONTOH SESUAI MODE
     # ======================================================
     contoh_reel_links = {
-        "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
-        "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
-        "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
+        "📱 Contoh 1 — David Gadgetin: "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
+        "🚗 Contoh 2 — Nexcarlos": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
+        "🏍 Contoh 3 — Timnas Indonesia": "https://www.instagram.com/reel/DFF_Fz7TaBk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     }
 
     url = ""
@@ -1396,6 +1396,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
