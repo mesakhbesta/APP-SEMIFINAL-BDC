@@ -93,6 +93,8 @@ def scrape_instagram_reel(url):
     driver = create_driver()
     target_url = f"https://social-tracker.com/stats/instagram/reels/{video_id}"
     driver.get(target_url)
+    wait = WebDriverWait(driver, 60)
+    data = {"url": url, "reel_id": video_id}
     try:
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "h3")))
 
@@ -1228,6 +1230,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
