@@ -620,7 +620,7 @@ def run_analyzer_page():
         <h1>🔍 ViralLens AI</h1>
         <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
 
-        <p><b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas —
+        <p><b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
         dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
         Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀</p>
 
@@ -653,7 +653,7 @@ def run_analyzer_page():
 # ================================
     st.markdown("""
     <div style='
-        margin-top: -12px;
+        margin-top: -90px;
         padding: 8px 12px;
         border-radius: 10px;
         background-color: rgba(241,245,249,0.06);
@@ -1377,6 +1377,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
