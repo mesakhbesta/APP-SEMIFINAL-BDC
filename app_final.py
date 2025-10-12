@@ -633,7 +633,7 @@ def run_analyzer_page():
 
     # =============== 5️⃣ TOMBOL ANALISIS ===============
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
 
         if not valid_url:
             st.error("""
@@ -1314,6 +1314,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
