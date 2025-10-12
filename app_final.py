@@ -652,7 +652,7 @@ def run_analyzer_page():
   # ==========================
 # 🎬 CARD DESKRIPSI INPUT
 # ==========================
-     st.markdown("""
+    st.markdown("""
     <div style='
         margin-top: -90px;
         padding: 8px 12px;
@@ -1380,6 +1380,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
