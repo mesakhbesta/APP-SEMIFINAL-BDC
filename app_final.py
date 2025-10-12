@@ -517,7 +517,7 @@ def run_analyzer_page():
         padding: 26px 32px;
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-        margin-top: 28px;
+        margin-top: 15px;
         margin-bottom: 25px;
         font-family: 'Inter', sans-serif;
         text-align: left;
@@ -1321,6 +1321,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
