@@ -556,15 +556,21 @@ def run_analyzer_page():
     url = st.text_input("Masukkan URL Instagram Reels:", key="url_input_main")
 
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        if "instagram.com/reel" not in url:
-            st.error("❌ URL tidak valid.")
+        # 🔹 regex: cocokkan semua pola URL Reels (dengan atau tanpa username)
+        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+    
+        if not valid_url:
+            st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
+                     "- https://www.instagram.com/reel/XXXXX/\n"
+                     "- https://www.instagram.com/<username>/reel/XXXXX/")
         else:
-            # clear state untuk run baru
+            # 🔄 clear state untuk run baru
             for k in list(st.session_state.keys()):
                 if k not in ["url_input_main", "nav_radio"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
+
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1222,6 +1228,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
