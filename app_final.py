@@ -550,6 +550,7 @@ def run_analyzer_page():
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
         color: #E2E8F0;
+        margin-top:14px;
         font-family: 'Inter', sans-serif;">
         <h1 style="font-size:30px; font-weight:800; color:#F8FAFC; margin:0 0 6px 0;">🔍 ViralLens AI</h1>
         <h3 style="font-size:15px; font-weight:500; color:#FACC15; margin:0 0 12px 0;">✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
@@ -573,7 +574,7 @@ def run_analyzer_page():
             font-size:13.5px;
             padding:10px 14px;
             border-radius:10px;
-            margin-top:100px;
+            margin-top:14px;
             line-height:1.6;">
             💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
             Gunakan untuk <b>berpindah halaman</b> antara 
@@ -1305,6 +1306,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
