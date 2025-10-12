@@ -610,7 +610,7 @@ def run_analyzer_page():
     <style>
     /* Default untuk laptop / desktop */
     .radio-wrapper {
-        margin-top: -130px;   /* Lebih besar agar benar-benar nempel */
+        margin-top: -1000px;   /* Lebih besar agar benar-benar nempel */
     }
     /* Untuk HP atau tablet */
     @media (max-width: 768px) {
@@ -1348,6 +1348,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
