@@ -529,7 +529,7 @@ def plot_top_words(df, aspect, color):
         font=dict(color="white")
     )
 
-    st.plotly_chart(fig_bar, use_container_width=True)
+    st.plotly_chart(fig_bar, width='stretch')
 
 def run_analyzer_page():
     # =============== 1️⃣ HAPUS PADDING STREAMLIT DEFAULT ===============
@@ -727,7 +727,7 @@ def run_analyzer_page():
         "keterangan": ket
     }])[["fullname","username","caption","duration","plays","views","likes","comments","engagement",
          "transcript","jumlah_komentar_positif","jumlah_komentar_netral","jumlah_komentar_negatif","keterangan"]]
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df, width='stretch')
 
     if "summary" not in st.session_state:
         with st.spinner("🧠 Menghasilkan ringkasan insight..."):
@@ -784,7 +784,7 @@ def run_analyzer_page():
             margin=dict(t=30, b=0, l=0, r=0),
             height=280
         )
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
 
         sentiment_option = st.selectbox(
             "Pilih tampilan sentimen:",
@@ -1314,6 +1314,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
