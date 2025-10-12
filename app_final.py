@@ -573,7 +573,7 @@ def run_analyzer_page():
             font-size:13.5px;
             padding:10px 14px;
             border-radius:10px;
-            margin-top:14px;
+            margin-top:20px;
             line-height:1.6;">
             💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
             Gunakan untuk <b>berpindah halaman</b> antara 
@@ -1305,6 +1305,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
