@@ -483,26 +483,41 @@ import streamlit.components.v1 as components
 import html, math
 from collections import Counter
 
-def plot_top_words(df, aspect_label, color):
-    all_text = " ".join(df["Comment"].astype(str).tolist()).lower()
-    words = [w for w in re.findall(r"\b[a-zA-Z]{3,}\b", all_text)]
-    counter = Counter(words)
-    common_words = counter.most_common(5)
-    if not common_words:
-        st.info("Tidak cukup kata untuk menampilkan grafik.")
+def plot_top_words(df, aspect, color):
+    # Jika data kosong atau terlalu sedikit, jangan tampilkan grafik
+    if df.empty or df["Comment"].str.strip().str.len().sum() < 30:
+        st.info("⚠️ Data komentar terlalu sedikit untuk divisualisasikan.")
         return
-    top_df = pd.DataFrame(common_words, columns=["Kata", "Frekuensi"])
-    fig = px.bar(top_df, x="Frekuensi", y="Kata", orientation="h", color_discrete_sequence=[color])
-    fig.update_layout(
-        yaxis=dict(autorange="reversed"),
+
+    from collections import Counter
+    import re
+    words = []
+    for c in df["Comment"]:
+        words += [w.lower() for w in re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ]+", str(c)) if len(w) > 3]
+    if len(words) < 5:
+        st.info("⚠️ Tidak cukup kata untuk membuat grafik kata.")
+        return
+
+    top_words = Counter(words).most_common(15)
+    top_df = pd.DataFrame(top_words, columns=["Kata", "Frekuensi"])
+
+    fig_bar = px.bar(
+        top_df, x="Frekuensi", y="Kata",
+        orientation="h", color_discrete_sequence=[color]
+    )
+    fig_bar.update_layout(
+        title=f"🔠 Kata Paling Sering Muncul ({aspect})",
+        title_font=dict(size=16, color="white"),
+        yaxis=dict(title=None),
+        xaxis=dict(title=None),
+        height=350,
+        margin=dict(l=10, r=10, t=40, b=10),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=10, r=10, t=30, b=10),
-        height=220,
-        font=dict(color="white"),
-        title=dict(text=f"🔍 Kata Dominan — {aspect_label}", font=dict(size=14, color="white"))
+        font=dict(color="white")
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig_bar, use_container_width=True)
+
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -874,61 +889,67 @@ def run_analyzer_page():
             senti_df = subset[subset["sentiment"] == senti].copy()
             if senti_df.empty:
                 continue
+        
             color = sentiment_colors[senti]
             gradient = gradient_colors[senti]
             label = senti.capitalize()
             desc = sentiment_desc[senti]
-
+        
             st.markdown(f"""
             <div style="border-radius:14px;padding:12px 18px;margin:28px 0 18px 0;background:{gradient};
                         box-shadow:0 0 15px rgba(0,0,0,0.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);">
-              <h5 style="margin:0;font-size:16px;font-weight:600;color:white;{font_style}">
+              <h5 style="margin:0;font-size:16px;font-weight:600;color:white;">
                 🎯 {label} Sentiment — <span style='opacity:.9'>{len(senti_df.drop_duplicates(subset="Comment")):,} komentar</span>
               </h5>
-              <p style="margin-top:6px;font-size:13.5px;color:rgba(255,255,255,.9);{font_style}">{desc}</p>
+              <p style="margin-top:6px;font-size:13.5px;color:rgba(255,255,255,.9);">{desc}</p>
             </div>
             """, unsafe_allow_html=True)
-
+        
             c1, c2 = st.columns([1, 1.2])
+        
+            # ===== LEFT COLUMN: WordCloud =====
             with c1:
                 all_text = " ".join(senti_df["Comment"].astype(str).tolist())
-                if all_text.strip():
-                    wc = WordCloud(width=600, height=300, background_color="white", colormap="Set2").generate(all_text)
+                # Filter: hanya huruf dan spasi, minimal 5 kata unik
+                words = [w for w in all_text.split() if w.isalpha()]
+                if len(set(words)) >= 5:
+                    wc = WordCloud(width=600, height=300, background_color="white", colormap="Set2").generate(" ".join(words))
                     fig, ax = plt.subplots(figsize=(5, 3))
                     ax.imshow(wc, interpolation="bilinear")
                     ax.axis("off")
                     st.pyplot(fig)
                 else:
-                    st.info("Tidak cukup teks untuk membuat WordCloud.")
-
+                    st.info("⚠️ Data komentar terlalu sedikit untuk dibuat WordCloud.")
+        
+            # ===== RIGHT COLUMN: List komentar =====
             with c2:
                 senti_df = senti_df.sort_values("confidence", ascending=False).drop_duplicates(subset="Comment").reset_index(drop=True)
                 total = len(senti_df)
                 per_page = 50
                 pages = max(1, math.ceil(total / per_page))
                 page_num = st.number_input(f"Halaman komentar ({label})", 1, pages, 1, key=f"page_sentiment_{label}")
-                start, end = (page_num - 1) * per_page, min((page_num) * per_page, total)
-
+                start, end = (page_num - 1) * per_page, min(page_num * per_page, total)
+        
                 cards = ""
                 for _, row in senti_df.iloc[start:end].iterrows():
                     comment_text = str(row.get("Comment", "")).strip()
                     if not comment_text:
                         continue
                     conf = round(float(row.get("confidence", 0)) * 100, 2)
-                    safe_comment = ihtml.escape(comment_text).replace("&lt;br&gt;", "<br>").replace("&lt;br /&gt;", "<br>")
+                    safe_comment = ihtml.escape(comment_text)
                     cards += f"""
                     <div style="border-left:4px solid {color};padding:12px 16px;margin-bottom:10px;background:rgba(255,255,255,.08);
                                 border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-                                box-shadow:0 3px 10px rgba(0,0,0,.25);transition:all .25s;transform:translateY(0)">
-                      <p style="margin:0;font-size:14.5px;line-height:1.6;color:white;{font_style}">💬 {safe_comment}</p>
-                      <p style="margin:4px 0 0 0;color:#B0B0B0;font-size:12.5px;{font_style}">🔹 Keyakinan: {conf}%</p>
+                                box-shadow:0 3px 10px rgba(0,0,0,.25);">
+                      <p style="margin:0;font-size:14.5px;line-height:1.6;color:white;">💬 {safe_comment}</p>
+                      <p style="margin:4px 0 0 0;color:#B0B0B0;font-size:12.5px;">🔹 Keyakinan: {conf}%</p>
                     </div>"""
-
+        
                 if cards.strip():
                     components.html(f"""
                       <div style="height:400px;padding:12px;border-radius:14px;background:rgba(255,255,255,.05);
                                   box-shadow:inset 0 0 12px rgba(255,255,255,.05), 0 4px 10px rgba(0,0,0,.3);
-                                  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;color:white;{font_style}">
+                                  overflow-y:auto;color:white;">
                         {cards}
                       </div>
                     """, height=420, scrolling=False)
@@ -1364,6 +1385,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
