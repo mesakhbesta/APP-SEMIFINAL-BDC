@@ -668,14 +668,24 @@ def run_analyzer_page():
 # ======================================================
 # 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL (FIXED)
 # ======================================================
+# ======================================================
+# 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL (STABIL TANPA RERUN)
+# ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
     
-    # Simpan semua URL contoh untuk pengecekan cepat
     contoh_urls = list(contoh_reel_links.values())
+    
+    # Inisialisasi state pelacak
+    if "prev_url" not in st.session_state:
+        st.session_state.prev_url = ""
+    if "url_input_main" not in st.session_state:
+        st.session_state.url_input_main = ""
+    if "example_selector" not in st.session_state:
+        st.session_state.example_selector = "(Pilih salah satu contoh)"
     
     col1, col2 = st.columns([1.6, 1.2])
     
@@ -694,16 +704,47 @@ def run_analyzer_page():
         )
     
     # ======================================================
-    # 🧠 Sinkronisasi dua arah (FIX SESUNGGUHNYA)
+    # 🧠 Sinkronisasi dua arah (tanpa rerun)
     # ======================================================
     
-    # 🟢 Jika user pilih contoh → isi otomatis URL
+    # Jika user memilih contoh → isi otomatis URL
     if selected_example != "(Pilih salah satu contoh)":
         contoh_url = contoh_reel_links[selected_example]
-        # Hindari loop update yang terus menerus
-        if st.session_state.url_input_main != contoh_url:
+        if url != contoh_url:  # hanya update bila berbeda
             st.session_state.url_input_main = contoh_url
+            url = contoh_url
+    
+    # Jika user mengetik URL baru yang bukan contoh → reset dropdown
+    elif (
+        url
+        and url != st.session_state.prev_url
+        and url not in contoh_urls
+        and st.session_state.example_selector != "(Pilih salah satu contoh)"
+    ):
+        st.session_state.example_selector = "(Pilih salah satu contoh)"
+    
+    # Simpan URL terakhir untuk tracking
+    st.session_state.prev_url = url
+    
+    # ======================================================
+    # 🚀 5️⃣ TOMBOL JALANKAN ANALISIS
+    # ======================================================
+    if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
+        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+    
+        if not valid_url:
+            st.error(
+                "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
+                "- https://www.instagram.com/reel/XXXXX/\n"
+                "- https://www.instagram.com/<username>/reel/XXXXX/"
+            )
+        else:
+            for k in list(st.session_state.keys()):
+                if k not in ["url_input_main", "nav_radio", "example_selector", "prev_url"]:
+                    del st.session_state[k]
+            st.session_state["run_new_analysis"] = True
             st.rerun()
+
     
     # 🔵 Jika user isi URL manual → reset dropdown ke default
     elif (
@@ -1391,6 +1432,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
