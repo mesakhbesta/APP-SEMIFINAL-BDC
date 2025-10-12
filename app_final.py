@@ -529,7 +529,7 @@ def plot_top_words(df, aspect, color):
     st.plotly_chart(fig_bar, use_container_width=True)
 
 def run_analyzer_page():
-    # =============== 1️⃣ HAPUS PADDING DEFAULT STREAMLIT ===============
+    # =============== 1️⃣ HAPUS PADDING STREAMLIT DEFAULT ===============
     st.markdown("""
     <style>
     .block-container { padding-top: 0 !important; padding-bottom: 0 !important; }
@@ -579,7 +579,7 @@ def run_analyzer_page():
     </div>
     """, unsafe_allow_html=True)
 
-    # =============== 3️⃣ PILIH MODE INPUT ===============
+    # =============== 3️⃣ RADIO PILIHAN MODE INPUT ===============
     st.markdown("<div style='margin-top:6px'></div>", unsafe_allow_html=True)
     mode = st.radio(
         "Pilih metode input:",
@@ -589,7 +589,7 @@ def run_analyzer_page():
         key="mode_selector"
     )
 
-    # =============== 4️⃣ INPUT URL / CONTOH ===============
+    # =============== 4️⃣ INPUT / CONTOH ===============
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
@@ -620,8 +620,8 @@ def run_analyzer_page():
                 color: #BFDBFE;
                 font-size: 14px;
                 line-height: 1.6;
-                margin-top: 4px;
-                margin-bottom: 4px;">
+                margin-top: 2px;
+                margin-bottom: 5px;">
             🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
             🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
             </div>
@@ -639,12 +639,19 @@ def run_analyzer_page():
             - https://www.instagram.com/<username>/reel/XXXXX/
             """)
         else:
-            st.session_state.clear()  # clear seluruh state agar segar
+            # hanya hapus hasil analisis lama, bukan UI
+            for k in list(st.session_state.keys()):
+                if k not in ["mode_selector", "url_input_main", "example_selector", "nav_radio"]:
+                    del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.session_state["current_url"] = url
+
+            # tampilkan spinner biar lebih smooth sebelum rerun
+            with st.spinner("⏳ Menyiapkan analisis..."):
+                time.sleep(0.7)
             st.rerun()
 
-    # =============== 6️⃣ PROSES ANALISIS (SAAT DIJALANKAN) ===============
+    # =============== 6️⃣ PROSES ANALISIS ===============
     if st.session_state.get("run_new_analysis", False):
         url = st.session_state.get("current_url", "")
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -699,7 +706,7 @@ def run_analyzer_page():
         st.session_state["run_new_analysis"] = False
         st.rerun()
 
-    # Jika belum dijalankan — stop di sini
+    # jika belum ada analisis, stop di sini
     if "analysis_data" not in st.session_state:
         return
 
@@ -1305,6 +1312,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
