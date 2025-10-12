@@ -685,6 +685,9 @@ def run_analyzer_page():
     col1, col2 = st.columns([1.8, 1.2])
     
     with col1:
+        # 🔹 Tambahkan sedikit jarak vertikal dari card di atas
+        st.markdown("<div style='height:20px;'></div>", unsafe_allow_html=True)
+    
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
@@ -1378,6 +1381,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
