@@ -541,19 +541,8 @@ def run_analyzer_page():
     st.markdown("""
     <style>
     .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
-    div.element-container { margin-bottom: 0rem !important; padding-bottom: 0rem !important; }
-    section[data-testid="stVerticalBlock"],
-    section[data-testid="stHorizontalBlock"],
-    section.main > div {
-        margin-top: 0rem !important; margin-bottom: 0rem !important;
-        padding-top: 0rem !important; padding-bottom: 0rem !important;
-    }
-    iframe { margin-top: 0rem !important; margin-bottom: 0rem !important; display: block; }
-    /* Netralisir container pertama setelah HTML */
-    .stVerticalBlock:first-child, .stHorizontalBlock:first-child {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
+    div[data-testid="stVerticalBlock"] { padding-top: 0 !important; margin-top: 0 !important; }
+    iframe { display: block; margin: 0 !important; padding: 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -568,21 +557,21 @@ def run_analyzer_page():
         padding: 22px 32px;
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-        margin-top: 10px;
-        margin-bottom: -15px;
         font-family: 'Inter', sans-serif;
         text-align: left;
         color: #E2E8F0;
         animation: fadeSlide 0.6s ease-out;
+        margin-bottom: 0;
     }
     .reeltalk-header h1 { font-size: 30px; font-weight: 800; color: #F8FAFC; margin: 0 0 6px 0; }
     .reeltalk-header h3 { font-size: 15px; font-weight: 500; color: #FACC15; margin: 0 0 12px 0; }
-    .reeltalk-header p { font-size: 14.5px; line-height: 1.7; color: #CBD5E1; text-align: justify; margin: 0; max-width: 92%; }
-    .sidebar-tip { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #BFDBFE;
-        font-size: 13.5px; padding: 10px 14px; margin-top: 14px; border-radius: 10px; line-height: 1.6;
-        box-shadow: inset 0 0 10px rgba(59,130,246,0.15);}
-    .sidebar-tip b { color: #E0F2FE; }
-    .sidebar-tip span { color: #60A5FA; font-weight:600; }
+    .reeltalk-header p { font-size: 14.5px; line-height: 1.7; color: #CBD5E1; margin: 0; max-width: 92%; }
+    .sidebar-tip {
+        background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+        color: #BFDBFE; font-size: 13.5px; padding: 10px 14px; border-radius: 10px;
+        margin-top: 14px; line-height: 1.6; box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
+    }
+    .sidebar-tip b { color: #E0F2FE; } .sidebar-tip span { color: #60A5FA; font-weight:600; }
     @keyframes fadeSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
@@ -596,42 +585,30 @@ def run_analyzer_page():
         <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
         <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.</p>
         <p style="margin-top: 10px;">Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡</p>
-        <div class="sidebar-tip">💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
-        Gunakan untuk <b>berpindah halaman</b> antara <span>🎬 ReelTalk Analyzer</span> dan <span>📊 Dashboard Looker</span>.
+        <div class="sidebar-tip">
+            💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
+            Gunakan untuk <b>berpindah halaman</b> antara <span>🎬 ReelTalk Analyzer</span> dan <span>📊 Dashboard Looker</span>.
         </div>
     </div>
     """
-    components.html(html_block, height=475, scrolling=False)
+    # ⬇️ gunakan jarak minimal agar komponen berikutnya langsung "nempel"
+    components.html(html_block, height=420, scrolling=False)
 
     # ======================================================
-    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT (Responsif per device)
+    # 🧭 3️⃣ PILIH METODE INPUT — langsung nempel tanpa margin
     # ======================================================
-    st.markdown("""
-    <style>
-    /* Default untuk laptop / desktop */
-    .radio-wrapper {
-        margin-top: -1000px;   /* Lebih besar agar benar-benar nempel */
-    }
-    /* Untuk HP atau tablet */
-    @media (max-width: 768px) {
-        .radio-wrapper {
-            margin-top: 5px;
-        }
-    }
-    </style>
-    <div class="radio-wrapper"></div>
-    """, unsafe_allow_html=True)
-
-    mode = st.radio(
-        "Pilih metode input:",
-        ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
-        horizontal=True,
-        index=0,
-        key="mode_selector"
-    )
+    with st.container():
+        st.markdown("<div style='margin-top:-10px'></div>", unsafe_allow_html=True)  # ini minimal, bukan -1000
+        mode = st.radio(
+            "Pilih metode input:",
+            ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
+            horizontal=True,
+            index=0,
+            key="mode_selector"
+        )
 
     # ======================================================
-    # 🔗 4️⃣ INPUT MANUAL / CONTOH SESUAI MODE
+    # 🔗 4️⃣ INPUT / CONTOH VIDEO
     # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -640,14 +617,12 @@ def run_analyzer_page():
     }
 
     url = ""
-
     if mode == "🔗 Masukkan link manual":
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
             placeholder="https://www.instagram.com/reel/XXXXX/",
         )
-
     else:
         selected_example = st.selectbox(
             "Pilih salah satu contoh video:",
@@ -655,8 +630,6 @@ def run_analyzer_page():
             key="example_selector",
         )
         url = contoh_reel_links[selected_example]
-
-        # 💡 Info link contoh tampil elegan
         st.markdown(
             f"""
             <div style="
@@ -667,13 +640,11 @@ def run_analyzer_page():
                 color: #BFDBFE;
                 font-size: 14px;
                 line-height: 1.6;
-                margin-top: 4px;
-            ">
+                margin-top: 4px;">
             🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
             🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """, unsafe_allow_html=True,
         )
 
     # ======================================================
@@ -685,6 +656,7 @@ def run_analyzer_page():
             st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>'.")
         else:
             st.success("✅ URL valid dan siap dianalisis!")
+
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1348,6 +1320,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
