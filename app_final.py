@@ -534,45 +534,41 @@ import streamlit as st
 import streamlit.components.v1 as components
 import re
 
+import streamlit as st
+import streamlit.components.v1 as components
+import re
+
 def run_analyzer_page():
-    # ======================================================
-    # 🔧 1️⃣ HAPUS JARAK BAWAAN STREAMLIT
-    # ======================================================
     st.markdown("""
     <style>
-    .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
-    div[data-testid="stVerticalBlock"] { padding-top: 0 !important; margin-top: 0 !important; }
-    iframe { display: block; margin: 0 !important; padding: 0 !important; }
+    .block-container { padding-top: 0 !important; padding-bottom: 0 !important; }
+    iframe { margin: 0 !important; padding: 0 !important; display: block; }
+    div[data-testid="stVerticalBlock"] { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
     # ======================================================
-    # 🎨 2️⃣ HEADER UTAMA — VIRALLENS AI
+    # 🎨 HEADER + RADIO dalam satu blok HTML
     # ======================================================
     html_block = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
     .reeltalk-header {
         background: linear-gradient(135deg, #0F172A, #1E293B);
-        padding: 22px 32px;
+        padding: 22px 32px 10px 32px; /* tambahkan ruang bawah kecil */
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
         font-family: 'Inter', sans-serif;
-        text-align: left;
         color: #E2E8F0;
-        animation: fadeSlide 0.6s ease-out;
         margin-bottom: 0;
     }
     .reeltalk-header h1 { font-size: 30px; font-weight: 800; color: #F8FAFC; margin: 0 0 6px 0; }
     .reeltalk-header h3 { font-size: 15px; font-weight: 500; color: #FACC15; margin: 0 0 12px 0; }
     .reeltalk-header p { font-size: 14.5px; line-height: 1.7; color: #CBD5E1; margin: 0; max-width: 92%; }
-    .sidebar-tip {
-        background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+    .sidebar-tip { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
         color: #BFDBFE; font-size: 13.5px; padding: 10px 14px; border-radius: 10px;
-        margin-top: 14px; line-height: 1.6; box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
-    }
+        margin-top: 14px; line-height: 1.6; box-shadow: inset 0 0 10px rgba(59,130,246,0.15);}
     .sidebar-tip b { color: #E0F2FE; } .sidebar-tip span { color: #60A5FA; font-weight:600; }
-    @keyframes fadeSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
     <div class="reeltalk-header">
@@ -587,28 +583,32 @@ def run_analyzer_page():
         <p style="margin-top: 10px;">Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡</p>
         <div class="sidebar-tip">
             💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
-            Gunakan untuk <b>berpindah halaman</b> antara <span>🎬 ReelTalk Analyzer</span> dan <span>📊 Dashboard Looker</span>.
+            Gunakan untuk <b>berpindah halaman</b> antara 
+            <span>🎬 ReelTalk Analyzer</span> dan 
+            <span>📊 Dashboard Looker</span>.
         </div>
+
+        <!-- Placeholder radio supaya nempel -->
+        <div id="radio-placeholder" style="margin-top:18px;"></div>
     </div>
     """
-    # ⬇️ gunakan jarak minimal agar komponen berikutnya langsung "nempel"
-    components.html(html_block, height=420, scrolling=False)
+    # ⬇️ Render header lebih tinggi sedikit supaya radio cukup ruang
+    components.html(html_block, height=470, scrolling=False)
 
     # ======================================================
-    # 🧭 3️⃣ PILIH METODE INPUT — langsung nempel tanpa margin
+    # 🎚 RADIO Langsung Nempel via Placeholder
     # ======================================================
-    with st.container():
-        st.markdown("<div style='margin-top:-10px'></div>", unsafe_allow_html=True)  # ini minimal, bukan -1000
-        mode = st.radio(
-            "Pilih metode input:",
-            ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
-            horizontal=True,
-            index=0,
-            key="mode_selector"
-        )
+    # Tidak ada margin-top tambahan di Streamlit
+    mode = st.radio(
+        "Pilih metode input:",
+        ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
+        horizontal=True,
+        index=0,
+        key="mode_selector"
+    )
 
     # ======================================================
-    # 🔗 4️⃣ INPUT / CONTOH VIDEO
+    # 🔗 INPUT / CONTOH
     # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -616,7 +616,6 @@ def run_analyzer_page():
         "🏍 Contoh 3 — Timnas Indonesia": "https://www.instagram.com/reel/DFF_Fz7TaBk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     }
 
-    url = ""
     if mode == "🔗 Masukkan link manual":
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
@@ -648,14 +647,14 @@ def run_analyzer_page():
         )
 
     # ======================================================
-    # 🚀 5️⃣ TOMBOL ANALISIS
+    # 🚀 TOMBOL ANALISIS
     # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-        if not valid_url:
+        if not re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url):
             st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>'.")
         else:
             st.success("✅ URL valid dan siap dianalisis!")
+
 
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
@@ -1320,6 +1319,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
