@@ -533,10 +533,6 @@ def plot_top_words(df, aspect, color):
 import streamlit as st
 import streamlit.components.v1 as components
 def run_analyzer_page():
-    import streamlit as st
-    import streamlit.components.v1 as components
-    import re
-
     # ======================================================
     # 🔧 1️⃣ HAPUS JARAK BAWAAN STREAMLIT
     # ======================================================
@@ -551,26 +547,6 @@ def run_analyzer_page():
         padding-top: 0rem !important; padding-bottom: 0rem !important;
     }
     iframe { margin-top: 0rem !important; margin-bottom: 0rem !important; display: block; }
-
-    /* 🔹 Atur jarak radio */
-    div[data-testid="stRadio"] {
-        margin-top: -80px !important;   /* default untuk laptop */
-    }
-    @media (max-width: 768px) {
-        div[data-testid="stRadio"] {
-            margin-top: -60px !important;  /* lebih rapat di HP */
-        }
-    }
-
-    /* 🔹 Atur jarak card contoh */
-    div.element-container:has(div.example-info-box) {
-        margin-top: -50px !important;   /* naik di laptop */
-    }
-    @media (max-width: 768px) {
-        div.element-container:has(div.example-info-box) {
-            margin-top: 5px !important;   /* turun dikit di HP */
-        }
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -658,7 +634,7 @@ def run_analyzer_page():
     components.html(html_block, height=475, scrolling=False)
 
     # ======================================================
-    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT
+    # 🧭 4️⃣ RADIO PILIHAN MODE INPUT
     # ======================================================
     mode = st.radio(
         "Pilih metode input:",
@@ -669,7 +645,7 @@ def run_analyzer_page():
     )
 
     # ======================================================
-    # 🔗 4️⃣ INPUT MANUAL / CONTOH SESUAI MODE
+    # 🔗 5️⃣ INPUT MANUAL / CONTOH SESUAI MODE
     # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -685,6 +661,7 @@ def run_analyzer_page():
             key="url_input_main",
             placeholder="https://www.instagram.com/reel/XXXXX/",
         )
+
     else:
         selected_example = st.selectbox(
             "Pilih salah satu contoh video:",
@@ -693,10 +670,10 @@ def run_analyzer_page():
         )
         url = contoh_reel_links[selected_example]
 
-        # 💡 Card info contoh video (rapat ke atas)
+        # 💡 Tampilkan info contoh beserta link klik-able
         st.markdown(
             f"""
-            <div class="example-info-box" style="
+            <div style="
                 background-color: rgba(59,130,246,0.08);
                 border: 1px solid rgba(59,130,246,0.25);
                 padding: 10px 12px;
@@ -710,8 +687,8 @@ def run_analyzer_page():
             </div>
             """,
             unsafe_allow_html=True,
-        )
-
+        ) 
+        
     # ======================================================
     # 🚀 5️⃣ TOMBOL ANALISIS
     # ======================================================
@@ -1389,6 +1366,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
