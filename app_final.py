@@ -629,41 +629,59 @@ def run_analyzer_page():
     # 🔗 4️⃣ INPUT MANUAL / CONTOH
     # ======================================================
     contoh_reel_links = {
-        "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
-        "🚗 Contoh 2 — Nexcarlos": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
-        "🏍 Contoh 3 — Timnas Indonesia": "https://www.instagram.com/reel/DFF_Fz7TaBk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-    }
-
-    url = ""
-    if mode == "🔗 Masukkan link manual":
-        url = st.text_input(
-            "Masukkan URL Instagram Reels:",
-            key="url_input_main",
-            placeholder="https://www.instagram.com/reel/XXXXX/",
-        )
-    else:
-        selected_example = st.selectbox(
-            "Pilih salah satu contoh video:",
-            list(contoh_reel_links.keys()),
-            key="example_selector",
-        )
-        url = contoh_reel_links[selected_example]
-        # 💅 Tambahkan CSS agar jarak card info contoh adaptif
-        st.markdown("""
-        <style>
-        /* Default: laptop / layar besar */
-        div.example-info-box {
-            margin-top: -50px !important;
+            "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
+            "🚗 Contoh 2 — Nexcarlos": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
+            "🏍 Contoh 3 — Timnas Indonesia": "https://www.instagram.com/reel/DFF_Fz7TaBk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
         }
-        
-        /* 📱 Responsif untuk HP / tablet */
-        @media (max-width: 768px) {
-            div.example-info-box {
-                margin-top: 5px !important;
-            }
-        }
-        </style>
-        """, unsafe_allow_html=True)
+    
+        url = ""
+    
+        if mode == "🔗 Masukkan link manual":
+            url = st.text_input(
+                "Masukkan URL Instagram Reels:",
+                key="url_input_main",
+                placeholder="https://www.instagram.com/reel/XXXXX/",
+            )
+        else:
+            selected_example = st.selectbox(
+                "Pilih salah satu contoh video:",
+                list(contoh_reel_links.keys()),
+                key="example_selector",
+            )
+            url = contoh_reel_links[selected_example]
+    
+            # 💡 Card info contoh video (rapat ke atas)
+            st.markdown(
+                f"""
+                <div class="example-info-box" style="
+                    background-color: rgba(59,130,246,0.08);
+                    border: 1px solid rgba(59,130,246,0.25);
+                    padding: 10px 12px;
+                    border-radius: 8px;
+                    color: #BFDBFE;
+                    font-size: 14px;
+                    line-height: 1.6;
+                ">
+                🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
+                🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+    
+        # ======================================================
+        # 🚀 5️⃣ TOMBOL ANALISIS
+        # ======================================================
+        if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
+            valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+            if not valid_url:
+                st.error(
+                    "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
+                    "- https://www.instagram.com/reel/XXXXX/\n"
+                    "- https://www.instagram.com/<username>/reel/XXXXX/"
+                )
+            else:
+                st.success(f"✅ URL valid: {url}")
         
         # ======================================================
         # Card info contoh video
@@ -1369,6 +1387,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
