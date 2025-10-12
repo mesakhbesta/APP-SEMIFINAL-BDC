@@ -19,7 +19,11 @@ warnings.filterwarnings("ignore", message="The keyword arguments have been depre
 # OPTIONAL: aktifkan fallback scraping komentar via Apify
 import streamlit as st
 import os
-
+st.markdown("""
+    <style>
+    [data-testid="stNotification"] {display: none;}
+    </style>
+""", unsafe_allow_html=True)
 # ==============================================================
 # 🔒 LOAD TOKENS DARI SECRETS ATAU ENV (AMAN UNTUK STREAMLIT)
 # ==============================================================
@@ -1319,6 +1323,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
