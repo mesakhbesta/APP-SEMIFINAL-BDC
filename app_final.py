@@ -635,28 +635,6 @@ def run_analyzer_page():
     components.html(html_block, height=475, scrolling=False)
 
     # ======================================================
-    # 🎥 3️⃣ CARD DESKRIPSI INPUT
-    # ======================================================
-    st.markdown("""
-    <div style='
-        margin-top: -90px;
-        padding: 8px 12px;
-        border-radius: 10px;
-        background-color: rgba(241,245,249,0.06);
-        border: 1px solid rgba(148,163,184,0.2);
-    '>
-        <h4 style='margin-bottom: 4px; color:#F8FAFC; font-size:15.5px;'>
-            🎥 <b>Masukkan URL Instagram Reels</b>
-        </h4>
-        <p style='font-size:13px; line-height:1.45; color:#CBD5E1; margin-bottom:3px;'>
-            Pilih salah satu metode di bawah ini untuk memulai analisis.  
-            Kamu bisa <b>memasukkan link manual</b> atau mencoba dari <b>contoh video</b>.  
-            <span style="color:#FCA5A5;">⚠️ Hanya salah satu opsi yang bisa digunakan sekaligus.</span>
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ======================================================
     # 🧭 4️⃣ RADIO PILIHAN MODE INPUT
     # ======================================================
     mode = st.radio(
@@ -1396,6 +1374,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
