@@ -568,7 +568,7 @@ def run_analyzer_page():
     }
     @media (max-width: 768px) {
         div.element-container:has(div.example-info-box) {
-            margin-top: 25px !important;   /* turun dikit di HP */
+            margin-top: 5px !important;   /* turun dikit di HP */
         }
     }
     </style>
@@ -712,33 +712,11 @@ def run_analyzer_page():
             unsafe_allow_html=True,
         )
 
-        # ======================================================
-        # Card info contoh video
-        # ======================================================
-        st.markdown(
-            f"""
-            <div class="example-info-box" style="
-                background-color: rgba(59,130,246,0.08);
-                border: 1px solid rgba(59,130,246,0.25);
-                padding: 10px 12px;
-                border-radius: 8px;
-                color: #BFDBFE;
-                font-size: 14px;
-                line-height: 1.6;
-            ">
-            🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
-            🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
     # ======================================================
-    # 🚀 6️⃣ TOMBOL ANALISIS
+    # 🚀 5️⃣ TOMBOL ANALISIS
     # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -746,12 +724,7 @@ def run_analyzer_page():
                 "- https://www.instagram.com/<username>/reel/XXXXX/"
             )
         else:
-            # 🔄 Bersihkan state sebelum analisis baru
-            for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio", "mode_selector", "example_selector"]:
-                    del st.session_state[k]
-            st.session_state["run_new_analysis"] = True
-            st.rerun()
+            st.success(f"✅ URL valid: {url}")
 
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
@@ -1416,6 +1389,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
