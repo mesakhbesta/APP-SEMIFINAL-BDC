@@ -681,9 +681,6 @@ def run_analyzer_page():
     col1, col2 = st.columns([1.6, 1.2])
     
     with col1:
-        # 🔹 Naikkan dikit biar nempel ke card di atas
-        st.markdown("<div style='margin-top:-200px;'></div>", unsafe_allow_html=True)
-    
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
@@ -691,8 +688,6 @@ def run_analyzer_page():
         )
     
     with col2:
-        st.markdown("<div style='margin-top:-200px;'></div>", unsafe_allow_html=True)
-    
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
@@ -1380,6 +1375,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
