@@ -1,4 +1,4 @@
-import streamlit as st
+-80import streamlit as st
 import pandas as pd
 import re, time, io, tempfile, requests, numpy as np, soundfile as sf, whisper, emoji, joblib
 from datetime import datetime, date
@@ -538,17 +538,35 @@ def run_analyzer_page():
     # ======================================================
     st.markdown("""
     <style>
-    /* Hilangkan jarak antar komponen sepenuhnya */
     .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
-    div[data-testid="stVerticalBlock"] { margin-top: 0rem !important; margin-bottom: 0rem !important; }
-    div[data-testid="stHorizontalBlock"] { margin-top: 0rem !important; margin-bottom: 0rem !important; }
     div.element-container { margin-bottom: 0rem !important; padding-bottom: 0rem !important; }
-
-    /* Hilangkan jarak spesifik antar komponen setelah header */
-    div[data-testid="stRadio"] { margin-top: -80px !important; } /* nempel ke header */
-    iframe { margin: 0 !important; display: block; }
+    section[data-testid="stVerticalBlock"],
+    section[data-testid="stHorizontalBlock"],
+    section.main > div {
+        margin-top: 0rem !important; margin-bottom: 0rem !important;
+        padding-top: 0rem !important; padding-bottom: 0rem !important;
+    }
+    
+    /* 🎯 Atur jarak radio agar nempel — beda untuk HP & laptop */
+    div[data-testid="stRadio"] {
+        margin-top: -80px !important;   /* default untuk laptop / layar besar */
+    }
+    
+    /* 📱 Responsif — buat HP atau tablet (max-width 768px) */
+    @media (max-width: 768px) {
+        div[data-testid="stRadio"] {
+            margin-top: -60px !important;  /* di HP lebih rapat */
+        }
+    }
+    
+    iframe {
+        margin-top: 0rem !important;
+        margin-bottom: 0rem !important;
+        display: block;
+    }
     </style>
     """, unsafe_allow_html=True)
+
 
     # ======================================================
     # 🎨 2️⃣ HEADER UTAMA — VIRALLENS AI
@@ -1332,6 +1350,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
