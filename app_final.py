@@ -503,72 +503,70 @@ def plot_top_words(df, aspect_label, color):
         title=dict(text=f"🔍 Kata Dominan — {aspect_label}", font=dict(size=14, color="white"))
     )
     st.plotly_chart(fig, use_container_width=True)
-
-import streamlit.components.v1 as components
-
 import streamlit.components.v1 as components
 
 def run_analyzer_page():
     html_block = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-    /* 🔧 reset default Streamlit padding */
+    /* 🔧 Reset padding dan margin Streamlit */
     .block-container {
-        padding-top: 0rem !important;
+        padding-top: 0.2rem !important;
         padding-bottom: 0rem !important;
     }
-
-    .reeltalk-header {
-        background: linear-gradient(135deg, #0F172A, #1E293B);
-        padding: 22px 32px;                /* lebih ramping */
-        border-radius: 16px;
-        box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-        margin-top: 10px;                  /* 🟢 ganti: semula 28px */
-        margin-bottom: 25px;
-        font-family: 'Inter', sans-serif;
-        text-align: left;
-        color: #E2E8F0;
+    section[data-testid="stHorizontalBlock"] {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    div[data-testid="stVerticalBlock"] {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
 
+    /* 🎨 Header styling */
+    .reeltalk-header {
+        background: linear-gradient(135deg, #0F172A, #1E293B);
+        padding: 20px 30px;
+        border-radius: 14px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+        margin-top: 5px;               /* 🟢 lebih rapat */
+        margin-bottom: 5px;            /* 🟢 kecilin jarak bawah */
+        font-family: 'Inter', sans-serif;
+        color: #E2E8F0;
+    }
     .reeltalk-header h1 {
         font-size: 30px;
         font-weight: 800;
         color: #F8FAFC;
         margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
     }
-
     .reeltalk-header h3 {
         font-size: 15px;
         font-weight: 500;
         color: #FACC15;
-        margin-bottom: 12px;
-        margin-top: 0px;                  /* 🟢 hapus jarak atas */
+        margin-bottom: 10px;
+        margin-top: 0;
     }
-
     .reeltalk-header p {
         font-size: 14.5px;
         line-height: 1.7;
         color: #CBD5E1;
         text-align: justify;
         margin: 0;
-        max-width: 92%;
     }
-
     .sidebar-tip {
         background: rgba(59,130,246,0.1);
         border: 1px solid rgba(59,130,246,0.25);
         color: #BFDBFE;
-        font-size: 13.8px;
+        font-size: 13.5px;
         padding: 12px 16px;
-        margin-top: 16px;
+        margin-top: 14px;
         border-radius: 10px;
         line-height: 1.6;
-        box-shadow: inset 0 0 12px rgba(59,130,246,0.15);
     }
-
     .sidebar-tip b { color: #E0F2FE; }
     .sidebar-tip span { color: #60A5FA; font-weight:600; }
     </style>
@@ -1330,6 +1328,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
