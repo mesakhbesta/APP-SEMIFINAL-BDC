@@ -623,60 +623,57 @@ def run_analyzer_page():
             🎥 <b>Masukkan URL Instagram Reels</b>
         </h4>
         <p style='font-size:13px; line-height:1.45; color:#CBD5E1; margin-bottom:3px;'>
-            Kamu bisa mencoba salah satu <span style="color:#F1F5F9; font-weight:600;">contoh video</span> di bawah  
-            atau <b>masukkan link Reels kamu sendiri</b>.  
-            <span style="color:#FCA5A5;">⚠️ Contoh ini hanya untuk uji coba — video lain dianalisis dengan cara yang sama.</span>
+            Pilih salah satu metode di bawah ini untuk memulai analisis.  
+            Kamu bisa <b>memasukkan link manual</b> atau mencoba dari <b>contoh video</b>.  
+            <span style="color:#FCA5A5;">⚠️ Hanya salah satu opsi yang bisa digunakan sekaligus.</span>
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     # ======================================================
-    # 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL
+    # 🧭 4️⃣ RADIO PILIHAN MODE INPUT
     # ======================================================
-# ======================================================
-# 🔗 4️⃣ INPUT MANUAL + PILIH CONTOH VIDEO
-# ======================================================
+    mode = st.radio(
+        "Pilih metode input:",
+        ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
+        horizontal=True,
+        index=0,
+        key="mode_selector"
+    )
+
+    # ======================================================
+    # 🔗 5️⃣ INPUT MANUAL / CONTOH SESUAI MODE
+    # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
-    
-    col1, col2 = st.columns([1.6, 1.2])
-    
-    # Gunakan form agar input manual hanya dikirim setelah user tekan Enter
-    with col1:
-        with st.form(key="manual_url_form", clear_on_submit=False):
-            url = st.text_input(
-                "Masukkan URL Instagram Reels:",
-                key="url_input_main",
-                placeholder="https://www.instagram.com/reel/XXXXX/",
-            )
-            submit_manual = st.form_submit_button("Gunakan Link Ini")
-    
-    with col2:
+
+    url = ""
+
+    if mode == "🔗 Masukkan link manual":
+        url = st.text_input(
+            "Masukkan URL Instagram Reels:",
+            key="url_input_main",
+            placeholder="https://www.instagram.com/reel/XXXXX/",
+        )
+
+    else:
         selected_example = st.selectbox(
-            "Atau pilih contoh video:",
-            ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
+            "Pilih salah satu contoh video:",
+            list(contoh_reel_links.keys()),
             key="example_selector",
         )
-    
-    # ======================================================
-    # 🚦 5️⃣ VALIDASI INPUT GANDA
-    # ======================================================
-    if submit_manual and selected_example != "(Pilih salah satu contoh)" and url.strip():
-        st.warning("⚠️ Kamu mengisi link manual dan memilih contoh sekaligus. Gunakan salah satu saja.")
-    elif not submit_manual and selected_example != "(Pilih salah satu contoh)":
-        # Kalau cuma pilih contoh → isi otomatis ke URL
         url = contoh_reel_links[selected_example]
         st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
-    
+
     # ======================================================
     # 🚀 6️⃣ TOMBOL ANALISIS
     # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-    
+
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -686,10 +683,11 @@ def run_analyzer_page():
         else:
             # 🔄 Bersihkan state sebelum analisis baru
             for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio", "example_selector"]:
+                if k not in ["url_input_main", "nav_radio", "mode_selector", "example_selector"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
+
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1347,6 +1345,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
