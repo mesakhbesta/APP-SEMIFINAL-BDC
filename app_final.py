@@ -528,11 +528,8 @@ def plot_top_words(df, aspect, color):
 
     st.plotly_chart(fig_bar, use_container_width=True)
 
-import streamlit as st
-import re
-
 def run_analyzer_page():
-    # Hapus padding default halaman
+    # =============== 1️⃣ HAPUS PADDING DEFAULT STREAMLIT ===============
     st.markdown("""
     <style>
     .block-container { padding-top: 0 !important; padding-bottom: 0 !important; }
@@ -540,9 +537,7 @@ def run_analyzer_page():
     </style>
     """, unsafe_allow_html=True)
 
-    # ======================================================
-    # 🎨 HEADER — Langsung pakai st.markdown (bukan iframe)
-    # ======================================================
+    # =============== 2️⃣ HEADER UTAMA ===============
     st.markdown("""
     <div style="
         background: linear-gradient(135deg, #0F172A, #1E293B);
@@ -584,9 +579,7 @@ def run_analyzer_page():
     </div>
     """, unsafe_allow_html=True)
 
-    # ======================================================
-    # 🎚 RADIO — Sekarang langsung nempel, tanpa jarak
-    # ======================================================
+    # =============== 3️⃣ PILIH MODE INPUT ===============
     st.markdown("<div style='margin-top:6px'></div>", unsafe_allow_html=True)
     mode = st.radio(
         "Pilih metode input:",
@@ -596,15 +589,14 @@ def run_analyzer_page():
         key="mode_selector"
     )
 
-    # ======================================================
-    # 🔗 INPUT / CONTOH
-    # ======================================================
+    # =============== 4️⃣ INPUT URL / CONTOH ===============
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Timnas Indonesia": "https://www.instagram.com/reel/DFF_Fz7TaBk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     }
 
+    url = ""
     if mode == "🔗 Masukkan link manual":
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
@@ -635,26 +627,25 @@ def run_analyzer_page():
             """, unsafe_allow_html=True,
         )
 
-    # ======================================================
-    # 🚀 TOMBOL ANALISIS
-    # ======================================================
+    # =============== 5️⃣ TOMBOL ANALISIS ===============
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        # cocokkan pola URL Reels (dengan atau tanpa username)
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-    
+        valid_url = re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+
         if not valid_url:
-            st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
-                     "- https://www.instagram.com/reel/XXXXX/\n"
-                     "- https://www.instagram.com/<username>/reel/XXXXX/")
+            st.error("""
+            ❌ URL tidak valid. Pastikan format seperti:
+            - https://www.instagram.com/reel/XXXXX/
+            - https://www.instagram.com/<username>/reel/XXXXX/
+            """)
         else:
-            # clear state untuk run baru
-            for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio", "example_selector"]:
-                    del st.session_state[k]
+            st.session_state.clear()  # clear seluruh state agar segar
             st.session_state["run_new_analysis"] = True
-            st.rerun() 
-            
-    if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
+            st.session_state["current_url"] = url
+            st.rerun()
+
+    # =============== 6️⃣ PROSES ANALISIS (SAAT DIJALANKAN) ===============
+    if st.session_state.get("run_new_analysis", False):
+        url = st.session_state.get("current_url", "")
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
             st.write("⏳ Mengambil data metrik...")
             data = scrape_instagram_reel(url)
@@ -662,7 +653,7 @@ def run_analyzer_page():
                 status.update(label="❌ Gagal mengambil metrik.", state="error")
                 st.stop()
 
-            st.write("🌐 Cek Video ...")
+            st.write("🎧 Mengambil audio...")
             audio_url = get_audio_from_instagram(url)
             if not audio_url:
                 status.update(label="❌ Gagal ambil audio.", state="error")
@@ -674,11 +665,9 @@ def run_analyzer_page():
             st.write("🧠 Mentranskripsi audio...")
             transcript = transcribe_audio(tmp_audio)
 
-            # === NEW: ambil komentar (DB lokal -> fallback scrape jika diset) ===
             st.write("💬 Mengambil komentar...")
             comments_df = get_comments_for_reel_id(data["reel_id"])
 
-            # === NEW: analisis sentiment/aspek dari DF yang sama ===
             if comments_df.empty:
                 pos = neu = neg = None
                 ket = "Tidak ada komentar / akses dibatasi IG"
@@ -686,17 +675,15 @@ def run_analyzer_page():
                 aspect_df = pd.DataFrame()
             else:
                 subset = analyze_sentiment_from_df(comments_df)
-                total = len(subset) if not subset.empty else 0
+                total = len(subset)
                 if total > 0:
-                    pos = round((subset["sentiment"] == "positive").sum() / total * 100, 2)
-                    neu = round((subset["sentiment"] == "neutral").sum() / total * 100, 2)
-                    neg = round((subset["sentiment"] == "negative").sum() / total * 100, 2)
-                    pos, neu, neg = f"{pos}%", f"{neu}%", f"{neg}%"
-                    ket = "Ada komentar"
+                    pos = f"{round((subset['sentiment'] == 'positive').sum()/total*100, 2)}%"
+                    neu = f"{round((subset['sentiment'] == 'neutral').sum()/total*100, 2)}%"
+                    neg = f"{round((subset['sentiment'] == 'negative').sum()/total*100, 2)}%"
+                    ket = "✅ Komentar berhasil dianalisis"
                 else:
                     pos = neu = neg = None
-                    ket = "Tidak ada komentar / akses dibatasi IG"
-
+                    ket = "Tidak ada komentar valid"
                 aspect_df = analyze_aspect_from_df(comments_df)
 
             status.update(label="✅ Analisis lengkap selesai!", state="complete")
@@ -711,6 +698,7 @@ def run_analyzer_page():
         st.session_state["run_new_analysis"] = False
         st.rerun()
 
+    # Jika belum dijalankan — stop di sini
     if "analysis_data" not in st.session_state:
         return
 
@@ -1316,6 +1304,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
