@@ -568,7 +568,7 @@ def run_analyzer_page():
     }
     @media (max-width: 768px) {
         div.element-container:has(div.example-info-box) {
-            margin-top: 5px !important;   /* turun dikit di HP */
+            margin-top: 25px !important;   /* turun dikit di HP */
         }
     }
     </style>
@@ -1416,6 +1416,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
