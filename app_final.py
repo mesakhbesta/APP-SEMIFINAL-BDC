@@ -584,24 +584,35 @@ def run_analyzer_page():
 # ================================
     # 🎥 Input URL Instagram Reels
     # ================================
+# ================================
+# 🎥 Input URL Instagram Reels
+# ================================
     st.markdown("""
-    <div style='padding: 15px; border-radius: 12px; background-color: #F1F5F9; border: 1px solid #CBD5E1;'>
-        <h3 style='margin-bottom: 6px;'>🎥 <b>Masukkan URL Instagram Reels</b></h3>
-        <p style='font-size: 15px; line-height: 1.6; margin-top: 2px;'>
-            Kamu bisa mencoba dengan salah satu <b>contoh video</b> di bawah ini,
-            atau <b>masukkan link Reels kamu sendiri</b>.  
-            <br><br>
-            <span style='color:#E11D48; font-weight:600;'>⚠️ Catatan:</span> 
-            contoh ini <b>hanya untuk uji coba</b> agar kamu bisa melihat bagaimana hasil analisis tampil.  
+    <div style='
+        padding: 10px 14px;
+        border-radius: 10px;
+        background-color: rgba(241,245,249,0.08);
+        border: 1px solid rgba(148,163,184,0.25);
+    '>
+        <h4 style='margin-bottom: 4px; color:#F8FAFC; font-size:17px;'>
+            🎥 <b>Masukkan URL Instagram Reels</b>
+        </h4>
+        <p style='font-size:14.2px; line-height:1.55; color:#CBD5E1; margin-bottom:5px;'>
+            Kamu bisa mencoba dengan salah satu <span style='color:#F1F5F9; font-weight:600;'>contoh video</span> di bawah ini,  
+            atau <b>masukkan link Reels kamu sendiri</b>.
+        </p>
+        <p style='font-size:13.5px; color:#FCA5A5; margin-top:2px;'>
+            ⚠️ <b>Catatan:</b> contoh ini hanya untuk <b>uji coba</b> agar kamu bisa melihat bagaimana hasil analisis tampil.  
             Semua video lain akan dianalisis dengan cara yang sama 👇
         </p>
     </div>
     """, unsafe_allow_html=True)
+
     
     # daftar contoh video real
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
-        "🚗 Contoh 2 — Nexcaros (Otomotif)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
+        "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
     
@@ -1301,6 +1312,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
