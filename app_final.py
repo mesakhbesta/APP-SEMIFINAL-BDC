@@ -532,8 +532,6 @@ def plot_top_words(df, aspect, color):
 
 import streamlit as st
 import streamlit.components.v1 as components
-import streamlit as st
-import streamlit.components.v1 as components
 import re
 
 def run_analyzer_page():
@@ -551,6 +549,11 @@ def run_analyzer_page():
         padding-top: 0rem !important; padding-bottom: 0rem !important;
     }
     iframe { margin-top: 0rem !important; margin-bottom: 0rem !important; display: block; }
+    /* Netralisir container pertama setelah HTML */
+    .stVerticalBlock:first-child, .stHorizontalBlock:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -601,15 +604,15 @@ def run_analyzer_page():
     components.html(html_block, height=475, scrolling=False)
 
     # ======================================================
-    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT (Responsif)
+    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT (Responsif per device)
     # ======================================================
     st.markdown("""
     <style>
-    /* Default: Laptop/Desktop */
+    /* Default untuk laptop / desktop */
     .radio-wrapper {
-        margin-top: -150px;
+        margin-top: -130px;   /* Lebih besar agar benar-benar nempel */
     }
-    /* Untuk HP/Tablet */
+    /* Untuk HP atau tablet */
     @media (max-width: 768px) {
         .radio-wrapper {
             margin-top: 5px;
@@ -653,7 +656,7 @@ def run_analyzer_page():
         )
         url = contoh_reel_links[selected_example]
 
-        # 💡 Info link contoh tampil dengan card elegan
+        # 💡 Info link contoh tampil elegan
         st.markdown(
             f"""
             <div style="
@@ -674,7 +677,7 @@ def run_analyzer_page():
         )
 
     # ======================================================
-    # 🚀 5️⃣ TOMBOL JALANKAN ANALISIS
+    # 🚀 5️⃣ TOMBOL ANALISIS
     # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         valid_url = re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
@@ -682,8 +685,6 @@ def run_analyzer_page():
             st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>'.")
         else:
             st.success("✅ URL valid dan siap dianalisis!")
-
-
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1347,6 +1348,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
