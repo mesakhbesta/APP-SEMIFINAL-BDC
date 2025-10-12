@@ -666,7 +666,26 @@ def run_analyzer_page():
             key="example_selector",
         )
         url = contoh_reel_links[selected_example]
-        st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
+
+        # 💡 Tampilkan info contoh beserta link klik-able
+        st.markdown(
+            f"""
+            <div style="
+                background-color: rgba(59,130,246,0.08);
+                border: 1px solid rgba(59,130,246,0.25);
+                padding: 10px 12px;
+                border-radius: 8px;
+                color: #BFDBFE;
+                font-size: 14px;
+                line-height: 1.6;
+            ">
+            🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
+            🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
 
     # ======================================================
     # 🚀 6️⃣ TOMBOL ANALISIS
@@ -1345,6 +1364,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
