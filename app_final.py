@@ -508,7 +508,9 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 def run_analyzer_page():
-    # === 🔧 1️⃣ Hapus jarak bawaan Streamlit antar komponen ===
+    # ======================================================
+    # 🔧 1️⃣ HAPUS JARAK BAWAAN STREAMLIT
+    # ======================================================
     st.markdown("""
     <style>
     /* Hilangkan padding & margin global antar elemen */
@@ -536,19 +538,20 @@ def run_analyzer_page():
     </style>
     """, unsafe_allow_html=True)
 
-    # === 2️⃣ Komponen HTML header utama ===
+    # ======================================================
+    # 🎨 2️⃣ HEADER UTAMA — VIRALLENS AI
+    # ======================================================
     html_block = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-    /* 🎨 Styling header utama */
     .reeltalk-header {
         background: linear-gradient(135deg, #0F172A, #1E293B);
         padding: 22px 32px;
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-        margin-top: 10px;         /* 🔹 rapat ke atas */
-        margin-bottom: -15px;     /* 🔹 rapat ke card bawah */
+        margin-top: 10px;
+        margin-bottom: -15px;
         font-family: 'Inter', sans-serif;
         text-align: left;
         color: #E2E8F0;
@@ -590,29 +593,20 @@ def run_analyzer_page():
         line-height: 1.6;
         box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
     }
+
     .sidebar-tip b { color: #E0F2FE; }
     .sidebar-tip span { color: #60A5FA; font-weight:600; }
 
-    /* ✨ Animasi smooth */
     @keyframes fadeSlide {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 📱 Responsif untuk HP */
     @media (max-width: 768px) {
-        .reeltalk-header {
-            padding: 18px 22px;
-        }
-        .reeltalk-header h1 {
-            font-size: 24px;
-        }
-        .reeltalk-header h3 {
-            font-size: 13px;
-        }
-        .reeltalk-header p {
-            font-size: 13.2px;
-        }
+        .reeltalk-header { padding: 18px 22px; }
+        .reeltalk-header h1 { font-size: 24px; }
+        .reeltalk-header h3 { font-size: 13px; }
+        .reeltalk-header p { font-size: 13.2px; }
     }
     </style>
 
@@ -620,18 +614,20 @@ def run_analyzer_page():
         <h1>🔍 ViralLens AI</h1>
         <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
 
-        <p><b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
-        dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
-        Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀</p>
-
-        <p style="margin-top: 10px;">
-        Dilengkapi dua fitur utama:
-        <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
-        <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
+        <p>
+            <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
+            dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
+            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
         </p>
 
         <p style="margin-top: 10px;">
-        Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
+            Dilengkapi dua fitur utama:
+            <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
+            <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
+        </p>
+
+        <p style="margin-top: 10px;">
+            Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
         </p>
 
         <div class="sidebar-tip">
@@ -642,16 +638,11 @@ def run_analyzer_page():
         </div>
     </div>
     """
-
-    # === 3️⃣ Render HTML Header ===
     components.html(html_block, height=475, scrolling=False)
 
-# ================================
-# 🎥 Input URL Instagram Reels
-# ================================
-  # ==========================
-# 🎬 CARD DESKRIPSI INPUT
-# ==========================
+    # ======================================================
+    # 🎥 3️⃣ INPUT URL INSTAGRAM REELS
+    # ======================================================
     st.markdown("""
     <div style='
         margin-top: -90px;
@@ -671,53 +662,55 @@ def run_analyzer_page():
     </div>
     """, unsafe_allow_html=True)
 
-    # daftar contoh video real
+    # ======================================================
+    # 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL
+    # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
-    
+
+    # 🧩 tata letak dua kolom input
     col1, col2 = st.columns([1.6, 1.2])
-    
+
     with col1:
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
             placeholder="https://www.instagram.com/reel/XXXXX/",
         )
-    
+
     with col2:
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
-         
 
-    # jika user pilih contoh, isi otomatis field input-nya
+    # ======================================================
+    # 🚀 5️⃣ HANDLER — PILIH CONTOH / ANALISIS
+    # ======================================================
     if selected_example != "(Pilih salah satu contoh)":
         url = contoh_reel_links[selected_example]
         st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
-    
-    # tombol jalankan analisis
+
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        # cocokkan pola URL Reels (dengan atau tanpa username)
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-    
+
         if not valid_url:
-            st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
-                     "- https://www.instagram.com/reel/XXXXX/\n"
-                     "- https://www.instagram.com/<username>/reel/XXXXX/")
+            st.error(
+                "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
+                "- https://www.instagram.com/reel/XXXXX/\n"
+                "- https://www.instagram.com/<username>/reel/XXXXX/"
+            )
         else:
-            # clear state untuk run baru
+            # 🔄 Clear state sebelum analisis baru
             for k in list(st.session_state.keys()):
                 if k not in ["url_input_main", "nav_radio", "example_selector"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
-
-
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1375,6 +1368,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
