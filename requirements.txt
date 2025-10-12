@@ -1,8 +1,8 @@
-streamlit
+streamlit>=1.40.0rc
+plotly>=5.24.1
 pandas
 numpy
 matplotlib
-plotly
 wordcloud
 emoji
 joblib
