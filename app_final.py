@@ -221,16 +221,19 @@ def download_file(url, suffix):
         f.write(r.content)
     return tmp_path
 
-def transcribe_audio(tmp_path):
-    audio_data, sr = sf.read(tmp_path, dtype="float32")
-    if len(audio_data.shape) > 1:
-        audio_data = np.mean(audio_data, axis=1)
-    if sr != 16000:
-        import resampy
-        audio_data = resampy.resample(audio_data, sr, 16000)
-    model = whisper.load_model("base")
-    result = model.transcribe(audio_data)
-    return result["text"]
+@st.cache_resource(show_spinner=False)
+def transcribe_audio(tmp_path: str) -> str:
+    try:
+        model = whisper.load_model("base")
+        audio_data, sr = sf.read(tmp_path, dtype="float32")
+        if len(audio_data.shape) > 1:
+            audio_data = np.mean(audio_data, axis=1)
+        if sr != 16000:
+            audio_data = resampy.resample(audio_data, sr, 16000)
+        result = model.transcribe(audio_data)
+        return result["text"]
+    except Exception:
+        return ""
 
 # ======================================================
 # 💬 SENTIMEN ANALISIS KOMENTAR (MODEL LOAD)
@@ -1311,6 +1314,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
