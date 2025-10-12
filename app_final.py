@@ -271,16 +271,8 @@ def extract_reel_id(url: str) -> str | None:
 # =======================
 @st.cache_data(show_spinner=False)
 def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
-    """
-    Ambil komentar dari sumber data yang tersedia:
-    1️⃣ Coba dari database lokal (Excel).
-    2️⃣ Jika tidak ada, coba metode pengambilan alternatif.
-    3️⃣ Jika semua gagal, kembalikan DataFrame kosong.
-    """
     try:
-        st.write("🔍 Menngambil komentar untuk Reel ID:", reel_id)
-
-        # ==== 1️⃣ CARI FILE KOMENTAR ====
+        st.write(f"🔍 Mengambil komentar untuk Reel ID: {reel_id}")
         excel_candidates = [
             "Data Komentar.xlsx",
             "./Data Komentar.xlsx",
@@ -291,8 +283,10 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
         ]
 
         excel_path = next((p for p in excel_candidates if os.path.exists(p)), None)
+
         if excel_path:
             df = pd.read_excel(excel_path)
+
             url_col = next((c for c in df.columns if c.strip().lower() in ["url", "link"]), None)
             cmt_col = next((c for c in df.columns if c.strip().lower() in ["comment", "komentar"]), None)
 
@@ -300,9 +294,10 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                 df[url_col] = df[url_col].astype(str)
 
                 # regex fleksibel: dukung /username/reel/ID dan /reel/ID
+                pattern = r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)"
                 df["reel_id"] = df[url_col].apply(
-                    lambda x: re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", x).group(1)
-                    if re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", x)
+                    lambda x: re.search(pattern, x).group(1)
+                    if re.search(pattern, x)
                     else None
                 )
 
@@ -320,7 +315,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                     st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
                     return comments
 
-        # ==== 2️⃣ FALLBACK OTOMATIS ====
+        # ==== 2️⃣ FALLBACK OTOMATIS (MULTI-TOKEN) ====
         st.info("🔄 Mencoba kembali mengambil data komentar...")
 
         if ApifyClient is not None and APIFY_TOKENS:
@@ -339,23 +334,21 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         if txt:
                             comments.append(txt)
 
-                    comments = list(dict.fromkeys(comments))
+                    comments = list(dict.fromkeys(comments))  
                     if comments:
                         st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
                         return pd.DataFrame({"Comment": comments})
 
-                except Exception:
+                except Exception as e:
                     continue
 
-        # ==== 3️⃣ JIKA GAGAL ====
         st.error("❌ Tidak ada komentar yang dapat diambil.")
         return pd.DataFrame(columns=["Comment"])
 
-    except Exception:
+    except Exception as e:
+        print(f"[ERROR] Gagal mengambil komentar: {e}")
         st.error("⚠️ Terjadi kesalahan saat mengambil komentar.")
         return pd.DataFrame(columns=["Comment"])
-
-
 
 # ======================================================
 # 🧠 ANALISIS SENTIMEN & ASPEK DARI DF KOMENTAR
@@ -1263,6 +1256,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
