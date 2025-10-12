@@ -712,20 +712,6 @@ def run_analyzer_page():
             unsafe_allow_html=True,
         )
 
-    # ======================================================
-    # 🚀 5️⃣ TOMBOL ANALISIS
-    # ======================================================
-    if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-        if not valid_url:
-            st.error(
-                "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
-                "- https://www.instagram.com/reel/XXXXX/\n"
-                "- https://www.instagram.com/<username>/reel/XXXXX/"
-            )
-        else:
-            st.success(f"✅ URL valid: {url}")
-        
         # ======================================================
         # Card info contoh video
         # ======================================================
@@ -1430,6 +1416,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
