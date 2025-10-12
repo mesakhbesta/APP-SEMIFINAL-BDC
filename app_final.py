@@ -653,6 +653,7 @@ def run_analyzer_page():
 # ================================
     st.markdown("""
     <div style='
+        margin-top: -8px;           /* 🟢 naik sedikit ke atas */
         padding: 10px 14px;
         border-radius: 10px;
         background-color: rgba(241,245,249,0.08);
@@ -671,6 +672,7 @@ def run_analyzer_page():
         </p>
     </div>
     """, unsafe_allow_html=True)
+
 
     
     # daftar contoh video real
@@ -1376,6 +1378,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
