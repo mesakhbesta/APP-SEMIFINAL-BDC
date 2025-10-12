@@ -55,7 +55,7 @@ except Exception:
 # =========================
 # CONFIG (set sekali)
 # =========================
-st.set_page_config(page_title="ReelTalk AI", page_icon="💬 ", layout="wide")
+st.set_page_config(page_title="🔍 ViralLens AI", page_icon="🔍 ", layout="wide")
 st.markdown("""
 <style>
 /* Scrollbar styling */
@@ -498,7 +498,7 @@ def plot_top_words(df, aspect, color):
         st.info("⚠️ Tidak cukup kata untuk membuat grafik kata.")
         return
 
-    top_words = Counter(words).most_common(15)
+    top_words = Counter(words).most_common(10)
     top_df = pd.DataFrame(top_words, columns=["Kata", "Frekuensi"])
 
     fig_bar = px.bar(
@@ -1385,6 +1385,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
