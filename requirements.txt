@@ -34,3 +34,4 @@ imageio
 imageio-ffmpeg
 xgboost
 openpyxl 
+warnings
