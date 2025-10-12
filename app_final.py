@@ -620,8 +620,7 @@ def run_analyzer_page():
                 color: #BFDBFE;
                 font-size: 14px;
                 line-height: 1.6;
-                margin-top: 2px;
-                margin-bottom: 5px;">
+                margin-top: 4px;">
             🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
             🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
             </div>
@@ -709,7 +708,7 @@ def run_analyzer_page():
     # jika belum ada analisis, stop di sini
     if "analysis_data" not in st.session_state:
         return
-
+        
     saved = st.session_state["analysis_data"]
     data = saved["data"]; transcript = saved["transcript"]
     pos, neu, neg, ket = saved["pos"], saved["neu"], saved["neg"], saved["ket"]
@@ -1312,6 +1311,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
