@@ -633,52 +633,50 @@ def run_analyzer_page():
     # ======================================================
     # 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL
     # ======================================================
+# ======================================================
+# 🔗 4️⃣ INPUT MANUAL + PILIH CONTOH VIDEO
+# ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
-
+    
     col1, col2 = st.columns([1.6, 1.2])
-
+    
+    # Gunakan form agar input manual hanya dikirim setelah user tekan Enter
     with col1:
-        url = st.text_input(
-            "Masukkan URL Instagram Reels:",
-            key="url_input_main",
-            placeholder="https://www.instagram.com/reel/XXXXX/",
-        )
-
+        with st.form(key="manual_url_form", clear_on_submit=False):
+            url = st.text_input(
+                "Masukkan URL Instagram Reels:",
+                key="url_input_main",
+                placeholder="https://www.instagram.com/reel/XXXXX/",
+            )
+            submit_manual = st.form_submit_button("Gunakan Link Ini")
+    
     with col2:
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
-
+    
     # ======================================================
-    # 🚦 5️⃣ VALIDASI INTERAKSI INPUT & DROPDOWN
+    # 🚦 5️⃣ VALIDASI INPUT GANDA
     # ======================================================
-    manual_input = st.session_state.get("url_input_main", "").strip()
-    dropdown_choice = st.session_state.get("example_selector", "(Pilih salah satu contoh)")
-
-    # 🔹 Jika user isi manual → reset dropdown ke awal
-    if manual_input and dropdown_choice != "(Pilih salah satu contoh)":
-        st.session_state["example_selector"] = "(Pilih salah satu contoh)"
-
-    # 🔹 Jika user pilih dropdown tapi input masih terisi → beri warning & batalkan pilihan
-    elif dropdown_choice != "(Pilih salah satu contoh)" and manual_input:
-        st.warning("⚠️ Hapus dulu link manual sebelum memilih contoh video.")
-        st.session_state["example_selector"] = "(Pilih salah satu contoh)"
-
-    # ======================================================
-    # 🚀 6️⃣ HANDLER — PILIH CONTOH / ANALISIS
-    # ======================================================
-    if selected_example != "(Pilih salah satu contoh)":
+    if submit_manual and selected_example != "(Pilih salah satu contoh)" and url.strip():
+        st.warning("⚠️ Kamu mengisi link manual dan memilih contoh sekaligus. Gunakan salah satu saja.")
+    elif not submit_manual and selected_example != "(Pilih salah satu contoh)":
+        # Kalau cuma pilih contoh → isi otomatis ke URL
         url = contoh_reel_links[selected_example]
         st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
-
+    
+    # ======================================================
+    # 🚀 6️⃣ TOMBOL ANALISIS
+    # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
+    
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -692,7 +690,6 @@ def run_analyzer_page():
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
-
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1350,6 +1347,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
