@@ -585,7 +585,7 @@ def run_analyzer_page():
         """, height=410, scrolling=False)
 
         # langsung di bawah header tanpa iframe gap
-        st.markdown("<div style='margin-top:-25px'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:-100px'></div>", unsafe_allow_html=True)
 
         mode = st.radio(
             "Pilih metode input:",
@@ -1305,6 +1305,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
