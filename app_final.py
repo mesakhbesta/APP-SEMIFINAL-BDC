@@ -530,8 +530,13 @@ def plot_top_words(df, aspect, color):
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white")
     )
-    config = {"displayModeBar": False}  # opsional untuk Plotly
-    st.plotly_chart(fig_bar, width='stretch', config=config)
+    config = {
+        "displayModeBar": False,   # sembunyikan toolbar
+        "responsive": True
+    }
+    
+    # === Tampilkan ke Streamlit ===
+    st.plotly_chart(fig_bar, width="stretch", config=config)
 
 def run_analyzer_page():
     # =============== 1️⃣ HAPUS PADDING STREAMLIT DEFAULT ===============
@@ -786,8 +791,13 @@ def run_analyzer_page():
             margin=dict(t=30, b=0, l=0, r=0),
             height=280
         )
-        config = {"displayModeBar": False}  # opsional untuk Plotly
-        st.plotly_chart(fig_pie, width='stretch', config=config)
+        config = {
+            "displayModeBar": False,   # sembunyikan toolbar Plotly
+            "responsive": True         # biar tetap menyesuaikan container
+        }
+        
+        # === Gunakan width='stretch' sebagai pengganti use_container_width ===
+        st.plotly_chart(fig_pie, width="stretch", config=config)
 
         sentiment_option = st.selectbox(
             "Pilih tampilan sentimen:",
@@ -1317,6 +1327,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
