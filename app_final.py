@@ -333,7 +333,9 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         "directUrls": [f"https://www.instagram.com/reel/{reel_id}"],
                         "resultsLimit": 500
                     }
-                    run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
+
+                    # 🔹 Gunakan actor resmi dari Apify
+                    run = client.actor("apify/instagram-comment-scraper").call(run_input=run_input)
 
                     comments = []
                     for item in client.dataset(run["defaultDatasetId"]).iterate_items():
@@ -341,7 +343,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         if txt:
                             comments.append(txt)
 
-                    comments = list(dict.fromkeys(comments))  
+                    comments = list(dict.fromkeys(comments))
                     if comments:
                         st.success(f"✅ Komentar berhasil diambil.")
                         return pd.DataFrame({"Comment": comments})
@@ -356,7 +358,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
         print(f"[ERROR] Gagal mengambil komentar: {e}")
         st.error("⚠️ Terjadi kesalahan saat mengambil komentar.")
         return pd.DataFrame(columns=["Comment"])
-
+        
 # ======================================================
 # 🧠 ANALISIS SENTIMEN & ASPEK DARI DF KOMENTAR
 # ======================================================
@@ -1317,6 +1319,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
