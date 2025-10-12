@@ -547,7 +547,7 @@ def run_analyzer_page():
         padding: 22px 32px;
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-        margin-top: -8px;         /* 🔹 rapat ke atas */
+        margin-top: 10px;         /* 🔹 rapat ke atas */
         margin-bottom: -15px;     /* 🔹 rapat ke card bawah */
         font-family: 'Inter', sans-serif;
         text-align: left;
@@ -1376,6 +1376,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
