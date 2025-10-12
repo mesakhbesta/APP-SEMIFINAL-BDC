@@ -665,73 +665,39 @@ def run_analyzer_page():
     # ======================================================
     # 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL
     # ======================================================
-# ======================================================
-# 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL (FIXED)
-# ======================================================
-# ======================================================
-# 🔗 4️⃣ PILIH CONTOH / INPUT MANUAL (STABIL TANPA RERUN)
-# ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
-    
-    contoh_urls = list(contoh_reel_links.values())
-    
-    # Inisialisasi state pelacak
-    if "prev_url" not in st.session_state:
-        st.session_state.prev_url = ""
-    if "url_input_main" not in st.session_state:
-        st.session_state.url_input_main = ""
-    if "example_selector" not in st.session_state:
-        st.session_state.example_selector = "(Pilih salah satu contoh)"
-    
+
+    # 🧩 tata letak dua kolom input
     col1, col2 = st.columns([1.6, 1.2])
-    
+
     with col1:
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
             placeholder="https://www.instagram.com/reel/XXXXX/",
         )
-    
+
     with col2:
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
-    
+
     # ======================================================
-    # 🧠 Sinkronisasi dua arah (tanpa rerun)
+    # 🚀 5️⃣ HANDLER — PILIH CONTOH / ANALISIS
     # ======================================================
-    
-    # Jika user memilih contoh → isi otomatis URL
     if selected_example != "(Pilih salah satu contoh)":
-        contoh_url = contoh_reel_links[selected_example]
-        if url != contoh_url:  # hanya update bila berbeda
-            st.session_state.url_input_main = contoh_url
-            url = contoh_url
-    
-    # Jika user mengetik URL baru yang bukan contoh → reset dropdown
-    elif (
-        url
-        and url != st.session_state.prev_url
-        and url not in contoh_urls
-        and st.session_state.example_selector != "(Pilih salah satu contoh)"
-    ):
-        st.session_state.example_selector = "(Pilih salah satu contoh)"
-    
-    # Simpan URL terakhir untuk tracking
-    st.session_state.prev_url = url
-    
-    # ======================================================
-    # 🚀 5️⃣ TOMBOL JALANKAN ANALISIS
-    # ======================================================
-    if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn_analyzer"):
+        url = contoh_reel_links[selected_example]
+        st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
+
+    if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-    
+
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -739,11 +705,13 @@ def run_analyzer_page():
                 "- https://www.instagram.com/<username>/reel/XXXXX/"
             )
         else:
+            # 🔄 Clear state sebelum analisis baru
             for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio", "example_selector", "prev_url"]:
+                if k not in ["url_input_main", "nav_radio", "example_selector"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
+
 
     
     # 🔵 Jika user isi URL manual → reset dropdown ke default
@@ -1432,6 +1400,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
