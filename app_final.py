@@ -13,6 +13,8 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
+import warnings
+warnings.filterwarnings("ignore", message="The keyword arguments have been deprecated")
 
 # OPTIONAL: aktifkan fallback scraping komentar via Apify
 import streamlit as st
@@ -530,7 +532,9 @@ def plot_top_words(df, aspect, color):
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white")
     )
-    st.plotly_chart(fig_bar, use_container_width=True
+    config = {"displayModeBar": False, "responsive": True}
+    st.plotly_chart(fig_bar, width="stretch", config=config)
+                    
 def run_analyzer_page():
     # =============== 1️⃣ HAPUS PADDING STREAMLIT DEFAULT ===============
     st.markdown("""
@@ -1314,6 +1318,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
