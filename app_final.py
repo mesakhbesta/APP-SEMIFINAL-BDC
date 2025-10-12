@@ -503,37 +503,52 @@ def plot_top_words(df, aspect_label, color):
         title=dict(text=f"🔍 Kata Dominan — {aspect_label}", font=dict(size=14, color="white"))
     )
     st.plotly_chart(fig, use_container_width=True)
+
+import streamlit as st
 import streamlit.components.v1 as components
 
 def run_analyzer_page():
-    html_block = """
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+    # === 🔧 1️⃣ Hapus jarak bawaan Streamlit antar komponen ===
+    st.markdown("""
     <style>
-    /* 🔧 Hilangkan jarak default antar komponen Streamlit */
+    /* Hilangkan padding & margin global antar elemen */
     .block-container {
         padding-top: 0rem !important;
         padding-bottom: 0rem !important;
     }
-    section.main > div, div[data-testid="stVerticalBlock"] {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        padding-top: 0 !important;
+    div.element-container {
+        margin-bottom: 0rem !important;
+        padding-bottom: 0rem !important;
+    }
+    section[data-testid="stVerticalBlock"],
+    section[data-testid="stHorizontalBlock"],
+    section.main > div {
+        margin-top: 0rem !important;
+        margin-bottom: 0rem !important;
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
     }
     iframe {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+        margin-top: 0rem !important;
+        margin-bottom: 0rem !important;
         display: block;
     }
+    </style>
+    """, unsafe_allow_html=True)
 
-    /* 🎨 Desain header utama */
+    # === 2️⃣ Komponen HTML header utama ===
+    html_block = """
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    /* 🎨 Styling header utama */
     .reeltalk-header {
         background: linear-gradient(135deg, #0F172A, #1E293B);
         padding: 22px 32px;
         border-radius: 16px;
         box-shadow: 0 3px 14px rgba(0,0,0,0.35);
         margin-top: -8px;         /* 🔹 rapat ke atas */
-        margin-bottom: -18px;     /* 🔹 rapat ke card bawah */
+        margin-bottom: -15px;     /* 🔹 rapat ke card bawah */
         font-family: 'Inter', sans-serif;
         text-align: left;
         color: #E2E8F0;
@@ -583,6 +598,22 @@ def run_analyzer_page():
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* 📱 Responsif untuk HP */
+    @media (max-width: 768px) {
+        .reeltalk-header {
+            padding: 18px 22px;
+        }
+        .reeltalk-header h1 {
+            font-size: 24px;
+        }
+        .reeltalk-header h3 {
+            font-size: 13px;
+        }
+        .reeltalk-header p {
+            font-size: 13.2px;
+        }
+    }
     </style>
 
     <div class="reeltalk-header">
@@ -611,7 +642,10 @@ def run_analyzer_page():
         </div>
     </div>
     """
+
+    # === 3️⃣ Render HTML Header ===
     components.html(html_block, height=475, scrolling=False)
+
 
 
 # ================================
@@ -1342,6 +1376,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
