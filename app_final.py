@@ -556,34 +556,53 @@ def run_analyzer_page():
         margin: 0;
         max-width: 92%;
     }
+
+    .sidebar-tip {
+        background: rgba(56,189,248,0.12);
+        border: 1px solid rgba(56,189,248,0.25);
+        color: #BAE6FD;
+        font-size: 13.8px;
+        padding: 12px 16px;
+        margin-top: 16px;
+        border-radius: 10px;
+        line-height: 1.6;
+        box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
+    }
+
+    .sidebar-tip b {
+        color: #E0F2FE;
+    }
     </style>
 
     <div class="reeltalk-header">
-    <h1>🔍 ViralLens AI</h1>
-    <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
+        <h1>🔍 ViralLens AI</h1>
+        <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
 
-    <p>
-    <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
-    dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
-    Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
-    </p>
+        <p>
+            <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas —
+            dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
+            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
+        </p>
 
-    <p style="margin-top: 10px;">
-    Dilengkapi dua fitur utama:
-    <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
-    <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
-    </p>
+        <p style="margin-top: 10px;">
+            Dilengkapi dua fitur utama:
+            <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
+            <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
+        </p>
 
-    <p style="margin-top: 10px;">
-    Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
-    </p>
+        <p style="margin-top: 10px;">
+            Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
+        </p>
+
+        <div class="sidebar-tip">
+            💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
+            Gunakan untuk <b>berpindah halaman</b> antara 
+            <span style="color:#7DD3FC;">🎬 ReelTalk Analyzer</span> dan 
+            <span style="color:#7DD3FC;">📊 Dashboard Looker</span>.
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-
-# ================================
-    # 🎥 Input URL Instagram Reels
-    # ================================
 # ================================
 # 🎥 Input URL Instagram Reels
 # ================================
@@ -1312,6 +1331,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
