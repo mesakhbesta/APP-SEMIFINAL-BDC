@@ -79,22 +79,20 @@ def create_driver():
 # 📊 SCRAPER METRIK INSTAGRAM (stabil wait + caption)
 # ======================================================
 def scrape_instagram_reel(url):
-    # 🔹 regex lebih fleksibel: bisa menangani URL dengan atau tanpa username di depannya
-    match = re.search(r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w.-]+)?/reel/([^/?#]+)", url)
+    # 🔹 regex baru yang benar-benar fleksibel
+    match = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
     if not match:
-        st.error("❌ URL tidak valid. Pastikan formatnya mengandung '/reel/<ID>', misalnya:\n"
-                 "- https://www.instagram.com/reel/XXXXX/\n"
-                 "- https://www.instagram.com/<username>/reel/XXXXX/")
+        st.error(
+            "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
+            "- https://www.instagram.com/reel/XXXXX/\n"
+            "- https://www.instagram.com/<username>/reel/XXXXX/"
+        )
         return None
 
-    # 🔹 ambil reel_id dari URL
     video_id = match.group(1)
-
-    # 🔹 buat driver Firefox headless
     driver = create_driver()
     target_url = f"https://social-tracker.com/stats/instagram/reels/{video_id}"
     driver.get(target_url)
-
     try:
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "h3")))
 
@@ -1224,6 +1222,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
