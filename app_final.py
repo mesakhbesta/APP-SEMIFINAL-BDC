@@ -652,7 +652,7 @@ def run_analyzer_page():
                 if k not in ["url_input_main", "nav_radio", "example_selector"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
-            st.rerun() rapuhkan ini
+            st.rerun() 
             
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
@@ -1316,6 +1316,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
