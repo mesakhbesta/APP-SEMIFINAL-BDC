@@ -620,7 +620,8 @@ def run_analyzer_page():
                 color: #BFDBFE;
                 font-size: 14px;
                 line-height: 1.6;
-                margin-top: 4px;">
+                margin-top: 4px;
+                margin-bottom: 4px;">
             🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
             🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
             </div>
@@ -1304,6 +1305,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
