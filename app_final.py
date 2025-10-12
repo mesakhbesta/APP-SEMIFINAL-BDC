@@ -590,7 +590,7 @@ def run_analyzer_page():
         </div>
     </div>
     """
-    components.html(html_block, height=430, scrolling=False)
+    components.html(html_block, height=475, scrolling=False)
 
 
 # ================================
@@ -1321,6 +1321,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
