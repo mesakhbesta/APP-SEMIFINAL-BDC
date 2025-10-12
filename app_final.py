@@ -513,28 +513,15 @@ def run_analyzer_page():
     # ======================================================
     st.markdown("""
     <style>
-    /* Hilangkan padding & margin global antar elemen */
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
-    div.element-container {
-        margin-bottom: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
+    .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
+    div.element-container { margin-bottom: 0rem !important; padding-bottom: 0rem !important; }
     section[data-testid="stVerticalBlock"],
     section[data-testid="stHorizontalBlock"],
     section.main > div {
-        margin-top: 0rem !important;
-        margin-bottom: 0rem !important;
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
+        margin-top: 0rem !important; margin-bottom: 0rem !important;
+        padding-top: 0rem !important; padding-bottom: 0rem !important;
     }
-    iframe {
-        margin-top: 0rem !important;
-        margin-bottom: 0rem !important;
-        display: block;
-    }
+    iframe { margin-top: 0rem !important; margin-bottom: 0rem !important; display: block; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -543,7 +530,6 @@ def run_analyzer_page():
     # ======================================================
     html_block = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
     .reeltalk-header {
         background: linear-gradient(135deg, #0F172A, #1E293B);
@@ -557,30 +543,16 @@ def run_analyzer_page():
         color: #E2E8F0;
         animation: fadeSlide 0.6s ease-out;
     }
-
     .reeltalk-header h1 {
-        font-size: 30px;
-        font-weight: 800;
-        color: #F8FAFC;
-        margin: 0 0 6px 0;
+        font-size: 30px; font-weight: 800; color: #F8FAFC; margin: 0 0 6px 0;
     }
-
     .reeltalk-header h3 {
-        font-size: 15px;
-        font-weight: 500;
-        color: #FACC15;
-        margin: 0 0 12px 0;
+        font-size: 15px; font-weight: 500; color: #FACC15; margin: 0 0 12px 0;
     }
-
     .reeltalk-header p {
-        font-size: 14.5px;
-        line-height: 1.7;
-        color: #CBD5E1;
-        text-align: justify;
-        margin: 0;
-        max-width: 92%;
+        font-size: 14.5px; line-height: 1.7; color: #CBD5E1; text-align: justify;
+        margin: 0; max-width: 92%;
     }
-
     .sidebar-tip {
         background: rgba(59,130,246,0.1);
         border: 1px solid rgba(59,130,246,0.25);
@@ -588,20 +560,16 @@ def run_analyzer_page():
         font-size: 13.5px;
         padding: 10px 14px;
         margin-top: 14px;
-        margin-bottom: 0;
         border-radius: 10px;
         line-height: 1.6;
         box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
     }
-
     .sidebar-tip b { color: #E0F2FE; }
     .sidebar-tip span { color: #60A5FA; font-weight:600; }
-
     @keyframes fadeSlide {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-
     @media (max-width: 768px) {
         .reeltalk-header { padding: 18px 22px; }
         .reeltalk-header h1 { font-size: 24px; }
@@ -641,7 +609,7 @@ def run_analyzer_page():
     components.html(html_block, height=475, scrolling=False)
 
     # ======================================================
-    # 🎥 3️⃣ INPUT URL INSTAGRAM REELS
+    # 🎥 3️⃣ CARD DESKRIPSI INPUT
     # ======================================================
     st.markdown("""
     <div style='
@@ -671,7 +639,6 @@ def run_analyzer_page():
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
 
-    # 🧩 tata letak dua kolom input
     col1, col2 = st.columns([1.6, 1.2])
 
     with col1:
@@ -689,15 +656,29 @@ def run_analyzer_page():
         )
 
     # ======================================================
-    # 🚀 5️⃣ HANDLER — PILIH CONTOH / ANALISIS
+    # 🚦 5️⃣ VALIDASI INTERAKSI INPUT & DROPDOWN
+    # ======================================================
+    manual_input = st.session_state.get("url_input_main", "").strip()
+    dropdown_choice = st.session_state.get("example_selector", "(Pilih salah satu contoh)")
+
+    # 🔹 Jika user isi manual → reset dropdown ke awal
+    if manual_input and dropdown_choice != "(Pilih salah satu contoh)":
+        st.session_state["example_selector"] = "(Pilih salah satu contoh)"
+
+    # 🔹 Jika user pilih dropdown tapi input masih terisi → beri warning & batalkan pilihan
+    elif dropdown_choice != "(Pilih salah satu contoh)" and manual_input:
+        st.warning("⚠️ Hapus dulu link manual sebelum memilih contoh video.")
+        st.session_state["example_selector"] = "(Pilih salah satu contoh)"
+
+    # ======================================================
+    # 🚀 6️⃣ HANDLER — PILIH CONTOH / ANALISIS
     # ======================================================
     if selected_example != "(Pilih salah satu contoh)":
         url = contoh_reel_links[selected_example]
         st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
 
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-
+        valid_url = re.search(r"(?:instagram\\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -705,38 +686,7 @@ def run_analyzer_page():
                 "- https://www.instagram.com/<username>/reel/XXXXX/"
             )
         else:
-            # 🔄 Clear state sebelum analisis baru
-            for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio", "example_selector"]:
-                    del st.session_state[k]
-            st.session_state["run_new_analysis"] = True
-            st.rerun()
-
-
-    
-    # 🔵 Jika user isi URL manual → reset dropdown ke default
-    elif (
-        st.session_state.url_input_main
-        and st.session_state.url_input_main not in contoh_urls
-        and st.session_state.example_selector != "(Pilih salah satu contoh)"
-    ):
-        st.session_state.example_selector = "(Pilih salah satu contoh)"
-        st.rerun()
-    
-    # ======================================================
-    # 🚀 5️⃣ TOMBOL JALANKAN ANALISIS
-    # ======================================================
-    if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-    
-        if not valid_url:
-            st.error(
-                "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
-                "- https://www.instagram.com/reel/XXXXX/\n"
-                "- https://www.instagram.com/<username>/reel/XXXXX/"
-            )
-        else:
-            # 🔄 Clear state sebelum analisis baru
+            # 🔄 Bersihkan state sebelum analisis baru
             for k in list(st.session_state.keys()):
                 if k not in ["url_input_main", "nav_radio", "example_selector"]:
                     del st.session_state[k]
@@ -1400,6 +1350,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
