@@ -33,3 +33,4 @@ pydub
 imageio
 imageio-ffmpeg
 xgboost
+openpyxl 
