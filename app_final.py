@@ -549,13 +549,13 @@ def run_analyzer_page():
     
     /* 🎯 Atur jarak radio agar nempel — beda untuk HP & laptop */
     div[data-testid="stRadio"] {
-        margin-top: -80px !important;   /* default untuk laptop / layar besar */
+        margin-top: -90px !important;   /* default untuk laptop / layar besar */
     }
     
     /* 📱 Responsif — buat HP atau tablet (max-width 768px) */
     @media (max-width: 768px) {
         div[data-testid="stRadio"] {
-            margin-top: -60px !important;  /* di HP lebih rapat */
+            margin-top: -10px !important;  /* di HP lebih rapat */
         }
     }
     
@@ -1350,6 +1350,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
