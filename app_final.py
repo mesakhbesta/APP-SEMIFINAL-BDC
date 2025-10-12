@@ -670,34 +670,46 @@ def run_analyzer_page():
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
-
-    # 🧩 tata letak dua kolom input
+    
     col1, col2 = st.columns([1.6, 1.2])
-
+    
     with col1:
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
             placeholder="https://www.instagram.com/reel/XXXXX/",
         )
-
+    
     with col2:
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
-
+    
     # ======================================================
-    # 🚀 5️⃣ HANDLER — PILIH CONTOH / ANALISIS
+    # 🧠 Sinkronisasi antara input manual dan dropdown
     # ======================================================
+    # Jika user memilih contoh → isi otomatis field URL
     if selected_example != "(Pilih salah satu contoh)":
         url = contoh_reel_links[selected_example]
         st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
-
+    
+    # Jika user mengubah URL manual → reset dropdown ke awal
+    if (
+        "example_selector" in st.session_state
+        and st.session_state.example_selector != "(Pilih salah satu contoh)"
+    ):
+        # Pastikan URL sekarang BUKAN dari salah satu contoh
+        if url not in contoh_reel_links.values():
+            st.session_state.example_selector = "(Pilih salah satu contoh)"
+    
+    # ======================================================
+    # 🚀 5️⃣ JALANKAN ANALISIS
+    # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
-
+    
         if not valid_url:
             st.error(
                 "❌ URL tidak valid. Pastikan mengandung '/reel/<ID>', misalnya:\n"
@@ -1368,6 +1380,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
