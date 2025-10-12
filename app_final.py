@@ -530,7 +530,7 @@ def plot_top_words(df, aspect, color):
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white")
     )
-     st.plotly_chart(fig_bar, use_container_width=True
+    st.plotly_chart(fig_bar, use_container_width=True
 def run_analyzer_page():
     # =============== 1️⃣ HAPUS PADDING STREAMLIT DEFAULT ===============
     st.markdown("""
@@ -1314,6 +1314,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
