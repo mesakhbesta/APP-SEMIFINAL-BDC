@@ -673,7 +673,6 @@ def run_analyzer_page():
             st.write("🧠 Mentranskripsi audio...")
             transcript = transcribe_audio(tmp_audio)
 
-            st.write("💬 Mengambil komentar...")
             comments_df = get_comments_for_reel_id(data["reel_id"])
 
             if comments_df.empty:
@@ -1312,6 +1311,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
