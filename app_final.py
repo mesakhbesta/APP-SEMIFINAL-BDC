@@ -529,74 +529,74 @@ def plot_top_words(df, aspect, color):
     st.plotly_chart(fig_bar, use_container_width=True)
 
 import streamlit as st
-import streamlit.components.v1 as components
 import re
 
 def run_analyzer_page():
+    # Hapus padding default halaman
     st.markdown("""
     <style>
     .block-container { padding-top: 0 !important; padding-bottom: 0 !important; }
-    iframe { margin: 0 !important; padding: 0 !important; display: block; }
     div[data-testid="stVerticalBlock"] { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
     # ======================================================
-    # 🎨 HEADER + KONTAINER RADIO DI DALAMNYA
+    # 🎨 HEADER — Langsung pakai st.markdown (bukan iframe)
     # ======================================================
-    with st.container():
-        components.html("""
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-        <style>
-        .reeltalk-header {
-            background: linear-gradient(135deg, #0F172A, #1E293B);
-            padding: 22px 32px 10px 32px;
-            border-radius: 16px;
-            box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-            font-family: 'Inter', sans-serif;
-            color: #E2E8F0;
-        }
-        .reeltalk-header h1 { font-size: 30px; font-weight: 800; color: #F8FAFC; margin: 0 0 6px 0; }
-        .reeltalk-header h3 { font-size: 15px; font-weight: 500; color: #FACC15; margin: 0 0 12px 0; }
-        .reeltalk-header p { font-size: 14.5px; line-height: 1.7; color: #CBD5E1; margin: 0; max-width: 92%; }
-        .sidebar-tip { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
-            color: #BFDBFE; font-size: 13.5px; padding: 10px 14px; border-radius: 10px;
-            margin-top: 14px; line-height: 1.6; box-shadow: inset 0 0 10px rgba(59,130,246,0.15);}
-        .sidebar-tip b { color: #E0F2FE; } .sidebar-tip span { color: #60A5FA; font-weight:600; }
-        </style>
-
-        <div class="reeltalk-header">
-            <h1>🔍 ViralLens AI</h1>
-            <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
-            <p><b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #0F172A, #1E293B);
+        padding: 22px 32px;
+        border-radius: 16px;
+        box-shadow: 0 3px 14px rgba(0,0,0,0.35);
+        color: #E2E8F0;
+        font-family: 'Inter', sans-serif;">
+        <h1 style="font-size:30px; font-weight:800; color:#F8FAFC; margin:0 0 6px 0;">🔍 ViralLens AI</h1>
+        <h3 style="font-size:15px; font-weight:500; color:#FACC15; margin:0 0 12px 0;">✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
+        <p style="font-size:14.5px; line-height:1.7; color:#CBD5E1; margin:0; text-align:justify;">
+            <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
             dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
-            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀</p>
-            <p style="margin-top: 10px;">Dilengkapi dua fitur utama:
-            <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
-            <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.</p>
-            <p style="margin-top: 10px;">Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡</p>
-            <div class="sidebar-tip">
-                💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
-                Gunakan untuk <b>berpindah halaman</b> antara 
-                <span>🎬 ReelTalk Analyzer</span> dan 
-                <span>📊 Dashboard Looker</span>.
-            </div>
+            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
+        </p>
+        <p style="margin-top:10px; font-size:14.5px; line-height:1.6; color:#CBD5E1;">
+            Dilengkapi dua fitur utama:<br>
+            • <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.<br>
+            • <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
+        </p>
+        <p style="margin-top:10px; font-size:14.5px; color:#CBD5E1;">
+            Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
+        </p>
+        <div style="
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.25);
+            color: #BFDBFE;
+            font-size:13.5px;
+            padding:10px 14px;
+            border-radius:10px;
+            margin-top:14px;
+            line-height:1.6;">
+            💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
+            Gunakan untuk <b>berpindah halaman</b> antara 
+            <span style='color:#60A5FA; font-weight:600;'>🎬 ReelTalk Analyzer</span> dan 
+            <span style='color:#60A5FA; font-weight:600;'>📊 Dashboard Looker</span>.
         </div>
-        """, height=410, scrolling=False)
-
-        # langsung di bawah header tanpa iframe gap
-        st.markdown("<div style='margin-top:-100px'></div>", unsafe_allow_html=True)
-
-        mode = st.radio(
-            "Pilih metode input:",
-            ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
-            horizontal=True,
-            index=0,
-            key="mode_selector"
-        )
+    </div>
+    """, unsafe_allow_html=True)
 
     # ======================================================
-    # INPUT AREA
+    # 🎚 RADIO — Sekarang langsung nempel, tanpa jarak
+    # ======================================================
+    st.markdown("<div style='margin-top:6px'></div>", unsafe_allow_html=True)
+    mode = st.radio(
+        "Pilih metode input:",
+        ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
+        horizontal=True,
+        index=0,
+        key="mode_selector"
+    )
+
+    # ======================================================
+    # 🔗 INPUT / CONTOH
     # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -634,15 +634,15 @@ def run_analyzer_page():
             """, unsafe_allow_html=True,
         )
 
+    # ======================================================
+    # 🚀 TOMBOL ANALISIS
+    # ======================================================
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
         if not re.search(r"(?:instagram\.com/)(?:[\\w.-]+/)?reel/([A-Za-z0-9_-]+)", url):
             st.error("❌ URL tidak valid. Pastikan mengandung '/reel/<ID>'.")
         else:
             st.success("✅ URL valid dan siap dianalisis!")
-
-
-
-
+            
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
         with st.status("🚀 Menjalankan analisis lengkap...", expanded=True) as status:
             st.write("⏳ Mengambil data metrik...")
@@ -1305,6 +1305,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
