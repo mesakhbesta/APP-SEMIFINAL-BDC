@@ -269,59 +269,68 @@ def extract_reel_id(url: str) -> str | None:
 @st.cache_data(show_spinner=False)
 def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
     try:
+        st.write("🔍 [DEBUG] Mencari komentar untuk Reel ID:", reel_id)
+
         # === 1️⃣ Cek data komentar di Excel lokal ===
         df = pd.read_excel(r"Data Komentar.xlsx")
         df["URL"] = df["URL"].astype(str)
 
-        # 🔹 regex baru: dukung URL dengan atau tanpa username sebelum /reel/
+        # Regex yang lebih fleksibel
         df["reel_id"] = df["URL"].apply(
             lambda x: (
-                re.search(r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w.-]+)?/reel/([^/?#]+)", x).group(1)
-                if re.search(r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w.-]+)?/reel/([^/?#]+)", x)
+                re.search(r"/reel/([A-Za-z0-9_-]+)", str(x)).group(1)
+                if re.search(r"/reel/([A-Za-z0-9_-]+)", str(x))
                 else None
             )
         )
 
+        # Debug: tampilkan beberapa hasil match
+        st.write("🧩 [DEBUG] 5 contoh reel_id hasil ekstraksi:", df["reel_id"].head().tolist())
+
         subset = df[df["reel_id"] == reel_id]
+        st.write(f"📊 [DEBUG] Jumlah komentar cocok di Excel: {len(subset)}")
+
         if not subset.empty:
+            st.success(f"✅ Data komentar ditemukan di Excel lokal ({len(subset)} baris)")
             return subset[["Comment"]].dropna().astype(str).drop_duplicates()
 
         # === 2️⃣ Fallback ke Apify (multi-token) ===
+        st.info("ℹ️ Tidak ditemukan di Excel, mencoba fallback ke Apify...")
         if ApifyClient is not None and APIFY_TOKENS:
             for i, token in enumerate(APIFY_TOKENS, start=1):
+                st.write(f"🧠 [DEBUG] Coba token ke-{i}")
                 try:
                     client = ApifyClient(token)
-
                     run_input = {
                         "directUrls": [f"https://www.instagram.com/reel/{reel_id}"],
                         "resultsLimit": 300
                     }
-
                     run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
-                    comments = []
+                    st.write("🔎 [DEBUG] Apify run info:", run)
 
+                    comments = []
                     for item in client.dataset(run["defaultDatasetId"]).iterate_items():
                         if "text" in item and str(item["text"]).strip():
                             comments.append(str(item["text"]).strip())
 
-                    # hapus duplikat sambil jaga urutan
-                    comments = list(dict.fromkeys(comments))
+                    comments = list(dict.fromkeys(comments))  # hapus duplikat
+                    st.write(f"📥 [DEBUG] Jumlah komentar dari Apify: {len(comments)}")
 
                     if comments:
+                        st.success(f"✅ Komentar diambil dari Apify (token ke-{i})")
                         return pd.DataFrame({"Comment": comments})
                     else:
-                        st.warning(f"⚠️")
-
+                        st.warning(f"⚠️ Token ke-{i} tidak menghasilkan komentar.")
                 except Exception as e:
-                    st.warning(f"⚠️ Gagal")
-                    continue  # lanjut ke token berikutnya
+                    st.warning(f"⚠️ Token ke-{i} gagal: {e}")
+                    continue
 
         # === 3️⃣ Jika semua gagal ===
-        st.warning("tidak ada komentar ditemukan.")
+        st.error("❌ Tidak ada komentar ditemukan dari sumber manapun.")
         return pd.DataFrame(columns=["Comment"])
 
     except Exception as e:
-        st.warning(f"⚠️ Gagal mengambil komentar: {e}")
+        st.error(f"⚠️ Gagal mengambil komentar: {e}")
         return pd.DataFrame(columns=["Comment"])
 
 # ======================================================
@@ -1230,6 +1239,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
