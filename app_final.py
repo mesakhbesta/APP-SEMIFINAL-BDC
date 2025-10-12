@@ -55,7 +55,7 @@ except Exception:
 # =========================
 # CONFIG (set sekali)
 # =========================
-st.set_page_config(page_title="🔍 ViralLens AI", page_icon="🔍 ", layout="wide")
+st.set_page_config(page_title="ViralLens AI", page_icon="🔍", layout="wide")
 st.markdown("""
 <style>
 /* Scrollbar styling */
@@ -1396,6 +1396,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
