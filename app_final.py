@@ -635,7 +635,6 @@ def run_analyzer_page():
         }
     
         url = ""
-    
         if mode == "🔗 Masukkan link manual":
             url = st.text_input(
                 "Masukkan URL Instagram Reels:",
@@ -650,10 +649,9 @@ def run_analyzer_page():
             )
             url = contoh_reel_links[selected_example]
     
-            # 💡 Card info contoh video (rapat ke atas)
             st.markdown(
                 f"""
-                <div class="example-info-box" style="
+                <div style="
                     background-color: rgba(59,130,246,0.08);
                     border: 1px solid rgba(59,130,246,0.25);
                     padding: 10px 12px;
@@ -667,8 +665,7 @@ def run_analyzer_page():
                 </div>
                 """,
                 unsafe_allow_html=True,
-            )
-
+            ) 
     # ======================================================
     # 🚀 5️⃣ TOMBOL ANALISIS
     # ======================================================
@@ -1401,6 +1398,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
