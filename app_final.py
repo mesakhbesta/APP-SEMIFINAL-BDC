@@ -272,7 +272,7 @@ def extract_reel_id(url: str) -> str | None:
 @st.cache_data(show_spinner=False)
 def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
     try:
-        st.write(f"🔍 Mengambil komentar untuk Reel ID: {reel_id}")
+        st.write(f"🔍 Mengambil komentar")
         excel_candidates = [
             "Data Komentar.xlsx",
             "./Data Komentar.xlsx",
@@ -312,7 +312,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         .query("Comment != ''")
                         .drop_duplicates()
                     )
-                    st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
+                    st.success(f"✅ Komentar berhasil diambil.")
                     return comments
 
         # ==== 2️⃣ FALLBACK OTOMATIS (MULTI-TOKEN) ====
@@ -336,7 +336,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
 
                     comments = list(dict.fromkeys(comments))  
                     if comments:
-                        st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
+                        st.success(f"✅ Komentar berhasil diambil.")
                         return pd.DataFrame({"Comment": comments})
 
                 except Exception as e:
@@ -484,7 +484,7 @@ import html, math
 from collections import Counter
 
 def plot_top_words(df, aspect, color):
-    # Jika data kosong atau terlalu sedikit, jangan tampilkan grafik
+    # Skip kalau datanya terlalu sedikit
     if df.empty or df["Comment"].str.strip().str.len().sum() < 30:
         st.info("⚠️ Data komentar terlalu sedikit untuk divisualisasikan.")
         return
@@ -494,21 +494,30 @@ def plot_top_words(df, aspect, color):
     words = []
     for c in df["Comment"]:
         words += [w.lower() for w in re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ]+", str(c)) if len(w) > 3]
+
     if len(words) < 5:
         st.info("⚠️ Tidak cukup kata untuk membuat grafik kata.")
         return
 
+    # Ambil 10 kata paling sering (DESC)
     top_words = Counter(words).most_common(10)
     top_df = pd.DataFrame(top_words, columns=["Kata", "Frekuensi"])
 
     fig_bar = px.bar(
-        top_df, x="Frekuensi", y="Kata",
-        orientation="h", color_discrete_sequence=[color]
+        top_df,
+        x="Frekuensi",
+        y="Kata",
+        orientation="h",
+        color_discrete_sequence=[color]
     )
+
     fig_bar.update_layout(
-        title=f"🔠 Kata Paling Sering Muncul ({aspect})",
+        title=f"🔠 10 Kata Paling Sering Muncul ({aspect})",
         title_font=dict(size=16, color="white"),
-        yaxis=dict(title=None),
+        yaxis=dict(
+            title=None,
+            autorange="reversed"  # ⬅️ bikin yang frekuensi terbesar tampil di ATAS
+        ),
         xaxis=dict(title=None),
         height=350,
         margin=dict(l=10, r=10, t=40, b=10),
@@ -516,7 +525,9 @@ def plot_top_words(df, aspect, color):
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white")
     )
+
     st.plotly_chart(fig_bar, use_container_width=True)
+
 
 
 import streamlit as st
@@ -1385,6 +1396,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
