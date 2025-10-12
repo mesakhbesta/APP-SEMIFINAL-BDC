@@ -532,66 +532,83 @@ def plot_top_words(df, aspect, color):
 
 import streamlit as st
 import streamlit.components.v1 as components
-
 def run_analyzer_page():
     # ======================================================
     # 🔧 1️⃣ HAPUS JARAK BAWAAN STREAMLIT
     # ======================================================
     st.markdown("""
     <style>
+    /* Hilangkan jarak antar komponen sepenuhnya */
     .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
+    div[data-testid="stVerticalBlock"] { margin-top: 0rem !important; margin-bottom: 0rem !important; }
+    div[data-testid="stHorizontalBlock"] { margin-top: 0rem !important; margin-bottom: 0rem !important; }
     div.element-container { margin-bottom: 0rem !important; padding-bottom: 0rem !important; }
-    section[data-testid="stVerticalBlock"],
-    section[data-testid="stHorizontalBlock"],
-    section.main > div {
-        margin-top: 0rem !important; margin-bottom: 0rem !important;
-        padding-top: 0rem !important; padding-bottom: 0rem !important;
-    }
-    iframe { margin-top: 0rem !important; margin-bottom: 0rem !important; display: block; }
 
-    /* 🎯 Bikin radio nempel ke atas */
-    div[data-testid="stRadio"] {
-        margin-top: -40px !important;  /* sesuaikan tinggi card-mu, -35 s.d -50 ideal */
-        margin-bottom: 0px !important;
-        padding-top: 0px !important;
-    }
+    /* Hilangkan jarak spesifik antar komponen setelah header */
+    div[data-testid="stRadio"] { margin-top: -60px !important; } /* nempel ke header */
+    iframe { margin: 0 !important; display: block; }
     </style>
     """, unsafe_allow_html=True)
 
     # ======================================================
-    # 🎨 HEADER UTAMA
+    # 🎨 2️⃣ HEADER UTAMA — VIRALLENS AI
     # ======================================================
     html_block = """
-    <div style="background: linear-gradient(135deg, #0F172A, #1E293B);
-                padding: 22px 32px; border-radius: 16px;
-                box-shadow: 0 3px 14px rgba(0,0,0,0.35);
-                margin-top: 10px; margin-bottom: -15px;">
-        <h1 style="font-size:30px;font-weight:800;color:#F8FAFC;margin:0 0 6px 0;">🔍 ViralLens AI</h1>
-        <h3 style="font-size:15px;font-weight:500;color:#FACC15;margin:0 0 12px 0;">
-            ✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu
-        </h3>
-        <p style="font-size:14.5px;line-height:1.7;color:#CBD5E1;text-align:justify;margin:0;max-width:92%;">
-            <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
-            dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
-            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
-        </p>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    .reeltalk-header {
+        background: linear-gradient(135deg, #0F172A, #1E293B);
+        padding: 22px 32px;
+        border-radius: 16px;
+        box-shadow: 0 3px 14px rgba(0,0,0,0.35);
+        margin-top: 10px;
+        margin-bottom: 0px; /* 🔹 Biar nempel langsung */
+        font-family: 'Inter', sans-serif;
+        text-align: left;
+        color: #E2E8F0;
+        animation: fadeSlide 0.6s ease-out;
+    }
+    .reeltalk-header h1 { font-size: 30px; font-weight: 800; color: #F8FAFC; margin: 0 0 6px 0; }
+    .reeltalk-header h3 { font-size: 15px; font-weight: 500; color: #FACC15; margin: 0 0 12px 0; }
+    .reeltalk-header p { font-size: 14.5px; line-height: 1.7; color: #CBD5E1; text-align: justify; margin: 0; max-width: 92%; }
+    .sidebar-tip { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+        color: #BFDBFE; font-size: 13.5px; padding: 10px 14px; margin-top: 14px; border-radius: 10px;
+        line-height: 1.6; box-shadow: inset 0 0 10px rgba(59,130,246,0.15); }
+    .sidebar-tip b { color: #E0F2FE; }
+    .sidebar-tip span { color: #60A5FA; font-weight:600; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    <div class="reeltalk-header">
+        <h1>🔍 ViralLens AI</h1>
+        <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
+        <p><b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas
+        dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
+        Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀</p>
+        <p style="margin-top: 10px;">Dilengkapi dua fitur utama:
+        <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
+        <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.</p>
+        <p style="margin-top: 10px;">Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡</p>
+        <div class="sidebar-tip">💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
+        Gunakan untuk <b>berpindah halaman</b> antara <span>🎬 ReelTalk Analyzer</span> dan <span>📊 Dashboard Looker</span>.
+        </div>
     </div>
     """
     components.html(html_block, height=475, scrolling=False)
 
     # ======================================================
-    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT — SUDAH RAPAT
+    # 🧭 3️⃣ RADIO PILIHAN MODE INPUT (BENAR-BENAR NEMPEL)
     # ======================================================
     mode = st.radio(
         "Pilih metode input:",
         ["🔗 Masukkan link manual", "🎬 Gunakan contoh video"],
         horizontal=True,
         index=0,
-        key="mode_selector"
+        key="mode_selector",
     )
 
     # ======================================================
-    # 🔗 4️⃣ INPUT MANUAL / CONTOH SESUAI MODE
+    # 🔗 4️⃣ INPUT MANUAL / CONTOH
     # ======================================================
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -614,15 +631,24 @@ def run_analyzer_page():
         )
         url = contoh_reel_links[selected_example]
 
-        st.markdown(f"""
-        <div style="background-color: rgba(59,130,246,0.08);
-                    border: 1px solid rgba(59,130,246,0.25);
-                    padding: 10px 12px; border-radius: 8px;
-                    color: #BFDBFE; font-size: 14px; line-height: 1.6;">
+        st.markdown(
+            f"""
+            <div style="
+                background-color: rgba(59,130,246,0.08);
+                border: 1px solid rgba(59,130,246,0.25);
+                padding: 10px 12px;
+                border-radius: 8px;
+                color: #BFDBFE;
+                font-size: 14px;
+                line-height: 1.6;
+            ">
             🔗 <b>Menggunakan contoh:</b> {selected_example}<br>
             🌐 <a href="{url}" target="_blank" style="color:#60A5FA; text-decoration:none;">{url}</a>
-        </div>
-        """, unsafe_allow_html=True)
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
 
     # ======================================================
     # 🚀 6️⃣ TOMBOL ANALISIS
@@ -1307,6 +1333,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
