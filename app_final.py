@@ -677,11 +677,11 @@ def run_analyzer_page():
         "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
     }
     
-    col1, col2 = st.columns([1.8, 1.2])
+    col1, col2 = st.columns([1.6, 1.2])
     
     with col1:
-        # 🔹 Tambahkan sedikit jarak vertikal dari card di atas
-        st.markdown("<div style='height:2px;'></div>", unsafe_allow_html=True)
+        # 🔹 Naikkan dikit biar nempel ke card di atas
+        st.markdown("<div style='margin-top:-8px;'></div>", unsafe_allow_html=True)
     
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
@@ -690,13 +690,14 @@ def run_analyzer_page():
         )
     
     with col2:
-        st.markdown("<div style='height:2px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:-8px;'></div>", unsafe_allow_html=True)
+    
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
-    
+        
     # jika user pilih contoh, isi otomatis field input-nya
     if selected_example != "(Pilih salah satu contoh)":
         url = contoh_reel_links[selected_example]
@@ -1377,6 +1378,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
