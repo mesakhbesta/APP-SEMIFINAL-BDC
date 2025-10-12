@@ -269,102 +269,62 @@ def extract_reel_id(url: str) -> str | None:
 # =======================
 # 🔧 Helpers (letakkan di atas get_comments_for_reel_id)
 # =======================
-def _first_existing_path(candidates:list[str]) -> str | None:
-    """Balikkan path pertama yang ada dari daftar kandidat."""
-    for p in candidates:
-        if os.path.exists(p):
-            return p
-    return None
-
-def _pick_column(df: pd.DataFrame, candidates: list[str]) -> str | None:
-    """Cari kolom dengan nama alternatif (case-insensitive, termasuk spasi/trim)."""
-    canon = {c.strip().lower(): c for c in df.columns}
-    for want in candidates:
-        w = want.strip().lower()
-        if w in canon:
-            return canon[w]
-        # coba cocokkan 'comment ' dengan spasi/variasi
-        for k, orig in canon.items():
-            if k.replace(" ", "") == w.replace(" ", ""):
-                return orig
-    return None
-
 @st.cache_data(show_spinner=False)
 def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
     """
-    Ambil komentar dari Excel lokal (dengan berbagai nama kolom/letak file yang umum).
-    Jika tidak ketemu, fallback ke Apify (multi-token).
+    Ambil komentar dari sumber data yang tersedia:
+    1️⃣ Coba dari database lokal (Excel).
+    2️⃣ Jika tidak ada, coba metode pengambilan alternatif.
+    3️⃣ Jika semua gagal, kembalikan DataFrame kosong.
     """
     try:
-        st.write("🔍 [DEBUG] Cari komentar untuk Reel ID:", reel_id)
+        st.write("🔍 Menngambil komentar untuk Reel ID:", reel_id)
 
-        # ==== 1) CARI FILE EXCEL DI BEBERAPA LOKASI UMUM ====
-        excel_path = _first_existing_path([
+        # ==== 1️⃣ CARI FILE KOMENTAR ====
+        excel_candidates = [
             "Data Komentar.xlsx",
             "./Data Komentar.xlsx",
             "instagram_comments/Data Komentar.xlsx",
             "./instagram_comments/Data Komentar.xlsx",
             "data/Data Komentar.xlsx",
             "./data/Data Komentar.xlsx",
-        ])
-        if excel_path is None:
-            st.warning("📂 [DEBUG] File 'Data Komentar.xlsx' tidak ditemukan di lokasi umum.")
-        else:
-            st.write(f"📂 [DEBUG] Pakai file Excel: {excel_path}")
-            try:
-                df = pd.read_excel(excel_path)
-            except Exception as e:
-                st.error(f"⚠️ Gagal baca Excel: {e}")
-                df = None
+        ]
 
-            if df is not None and not df.empty:
-                # ==== 2) NORMALISASI NAMA KOLOM ====
-                url_col = _pick_column(df, ["URL", "Link", "link", "url"])
-                cmt_col = _pick_column(df, ["Comment", "Komentar", "comment", "komentar"])
+        excel_path = next((p for p in excel_candidates if os.path.exists(p)), None)
+        if excel_path:
+            df = pd.read_excel(excel_path)
+            url_col = next((c for c in df.columns if c.strip().lower() in ["url", "link"]), None)
+            cmt_col = next((c for c in df.columns if c.strip().lower() in ["comment", "komentar"]), None)
 
-                st.write("🧭 [DEBUG] Kolom terdeteksi → URL:", url_col, "| Comment:", cmt_col)
-                if url_col is None or cmt_col is None:
-                    st.warning("⚠️ [DEBUG] Kolom URL/Comment tidak ditemukan di Excel.")
-                else:
-                    # pastikan string
-                    df[url_col] = df[url_col].astype(str)
+            if url_col and cmt_col:
+                df[url_col] = df[url_col].astype(str)
 
-                    # ==== 3) EKSTRAK reel_id DARI URL (regex fleksibel) ====
-                    # dukung: instagram.com/reel/<ID>  atau instagram.com/<username>/reel/<ID>
-                    pat = r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w\.-]+)?/reel/([^/?#]+)"
-                    df["reel_id"] = df[url_col].apply(
-                        lambda x: re.search(pat, x).group(1).strip() if re.search(pat, x) else None
+                # regex fleksibel: dukung /username/reel/ID dan /reel/ID
+                df["reel_id"] = df[url_col].apply(
+                    lambda x: re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", x).group(1)
+                    if re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", x)
+                    else None
+                )
+
+                subset = df[df["reel_id"] == reel_id].copy()
+                if not subset.empty:
+                    comments = (
+                        subset[[cmt_col]]
+                        .rename(columns={cmt_col: "Comment"})
+                        .dropna()
+                        .astype(str)
+                        .assign(Comment=lambda s: s["Comment"].str.strip())
+                        .query("Comment != ''")
+                        .drop_duplicates()
                     )
+                    st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
+                    return comments
 
-                    st.write("🧩 [DEBUG] Contoh hasil reel_id dari Excel:", df["reel_id"].dropna().head(10).tolist())
+        # ==== 2️⃣ FALLBACK OTOMATIS ====
+        st.info("🔄 Mencoba kembali mengambil data komentar...")
 
-                    # ==== 4) FILTER SESUAI reel_id ====
-                    subset = df[df["reel_id"] == str(reel_id)].copy()
-                    st.write(f"📊 [DEBUG] Jumlah baris cocok di Excel: {len(subset)}")
-
-                    if not subset.empty:
-                        # bersihkan & unik
-                        out = (
-                            subset[[cmt_col]]
-                            .rename(columns={cmt_col: "Comment"})
-                            .dropna()
-                            .astype(str)
-                            .assign(Comment=lambda s: s["Comment"].str.strip())
-                        )
-                        out = out[out["Comment"] != ""].drop_duplicates()
-                        st.success(f"✅ Komentar ditemukan di Excel: {len(out)} baris.")
-                        st.write("🧪 [DEBUG] 5 contoh komentar:", out["Comment"].head(5).tolist())
-                        return out
-
-        # ==== 5) FALLBACK KE APIFY (multi-token) ====
-        st.info("ℹ️ Tidak ada di Excel → mencoba Apify…")
-        if ApifyClient is None:
-            st.warning("⚠️ Paket apify_client tidak terpasang. Lewati fallback Apify.")
-        elif not APIFY_TOKENS:
-            st.warning("⚠️ APIFY_TOKENS kosong. Tambahkan ke secrets/env untuk fallback.")
-        else:
+        if ApifyClient is not None and APIFY_TOKENS:
             for i, token in enumerate(APIFY_TOKENS, start=1):
-                st.write(f"🧠 [DEBUG] Coba Apify token ke-{i}")
                 try:
                     client = ApifyClient(token)
                     run_input = {
@@ -372,7 +332,6 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         "resultsLimit": 300
                     }
                     run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
-                    st.write("🔎 [DEBUG] Apify run summary:", {k: run.get(k) for k in ["status", "defaultDatasetId", "id"]})
 
                     comments = []
                     for item in client.dataset(run["defaultDatasetId"]).iterate_items():
@@ -380,28 +339,22 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                         if txt:
                             comments.append(txt)
 
-                    # uniq + jaga urutan
                     comments = list(dict.fromkeys(comments))
-                    st.write(f"📥 [DEBUG] Komentar dari Apify (token {i}):", len(comments))
-
                     if comments:
-                        out = pd.DataFrame({"Comment": comments})
-                        st.success(f"✅ Komentar berhasil diambil dari Apify (token {i}): {len(out)} baris.")
-                        st.write("🧪 [DEBUG] 5 contoh komentar:", out["Comment"].head(5).tolist())
-                        return out
+                        st.success(f"✅ Data komentar berhasil diambil ({len(comments)} komentar).")
+                        return pd.DataFrame({"Comment": comments})
 
-                    st.warning(f"⚠️ Token ke-{i} berhasil jalan tapi komentar kosong.")
-                except Exception as e:
-                    st.warning(f"⚠️ Token ke-{i} gagal: {e}")
+                except Exception:
                     continue
 
-        # ==== 6) JIKA TETAP GAGAL ====
-        st.error("❌ Tidak ada komentar ditemukan dari Excel maupun Apify.")
+        # ==== 3️⃣ JIKA GAGAL ====
+        st.error("❌ Tidak ada komentar yang dapat diambil.")
         return pd.DataFrame(columns=["Comment"])
 
-    except Exception as e:
-        st.error(f"⚠️ Gagal mengambil komentar: {e}")
+    except Exception:
+        st.error("⚠️ Terjadi kesalahan saat mengambil komentar.")
         return pd.DataFrame(columns=["Comment"])
+
 
 
 # ======================================================
@@ -1310,6 +1263,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
