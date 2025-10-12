@@ -545,7 +545,7 @@ def run_analyzer_page():
     div.element-container { margin-bottom: 0rem !important; padding-bottom: 0rem !important; }
 
     /* Hilangkan jarak spesifik antar komponen setelah header */
-    div[data-testid="stRadio"] { margin-top: -60px !important; } /* nempel ke header */
+    div[data-testid="stRadio"] { margin-top: -80px !important; } /* nempel ke header */
     iframe { margin: 0 !important; display: block; }
     </style>
     """, unsafe_allow_html=True)
@@ -648,7 +648,6 @@ def run_analyzer_page():
             """,
             unsafe_allow_html=True,
         )
-
 
     # ======================================================
     # 🚀 6️⃣ TOMBOL ANALISIS
@@ -1333,6 +1332,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
