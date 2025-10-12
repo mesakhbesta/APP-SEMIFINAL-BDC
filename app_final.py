@@ -648,10 +648,29 @@ def run_analyzer_page():
             key="example_selector",
         )
         url = contoh_reel_links[selected_example]
-
+        # 💅 Tambahkan CSS agar jarak card info contoh adaptif
+        st.markdown("""
+        <style>
+        /* Default: laptop / layar besar */
+        div.example-info-box {
+            margin-top: -50px !important;
+        }
+        
+        /* 📱 Responsif untuk HP / tablet */
+        @media (max-width: 768px) {
+            div.example-info-box {
+                margin-top: 5px !important;
+            }
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # ======================================================
+        # Card info contoh video
+        # ======================================================
         st.markdown(
             f"""
-            <div style="
+            <div class="example-info-box" style="
                 background-color: rgba(59,130,246,0.08);
                 border: 1px solid rgba(59,130,246,0.25);
                 padding: 10px 12px;
@@ -1350,6 +1369,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
