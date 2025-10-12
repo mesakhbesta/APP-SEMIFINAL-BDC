@@ -652,9 +652,9 @@ def run_analyzer_page():
   # ==========================
 # 🎬 CARD DESKRIPSI INPUT
 # ==========================
-    st.markdown("""
+     st.markdown("""
     <div style='
-        margin-top: -90px;   /* tetap kamu punya */
+        margin-top: -90px;
         padding: 8px 12px;
         border-radius: 10px;
         background-color: rgba(241,245,249,0.06);
@@ -670,13 +670,8 @@ def run_analyzer_page():
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # 🔹 ini penting — dorong ke atas semua columns (biar nempel)
-    st.markdown("<div style='margin-top:-18px;'></div>", unsafe_allow_html=True)
-    
-    # ==========================
-    # 🔗 CONTOH LINK + INPUT
-    # ==========================
+
+    # daftar contoh video real
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
         "🚗 Contoh 2 — Nexcarlos (Kuliner)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
@@ -686,7 +681,9 @@ def run_analyzer_page():
     col1, col2 = st.columns([1.6, 1.2])
     
     with col1:
-        st.markdown("<div style='margin-top:-6px;'></div>", unsafe_allow_html=True)
+        # 🔹 Naikkan dikit biar nempel ke card di atas
+        st.markdown("<div style='margin-top:-80px;'></div>", unsafe_allow_html=True)
+    
         url = st.text_input(
             "Masukkan URL Instagram Reels:",
             key="url_input_main",
@@ -694,12 +691,14 @@ def run_analyzer_page():
         )
     
     with col2:
-        st.markdown("<div style='margin-top:-6px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:-80px;'></div>", unsafe_allow_html=True)
+    
         selected_example = st.selectbox(
             "Atau pilih contoh video:",
             ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
             key="example_selector",
         )
+         
 
     # jika user pilih contoh, isi otomatis field input-nya
     if selected_example != "(Pilih salah satu contoh)":
@@ -1381,6 +1380,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
