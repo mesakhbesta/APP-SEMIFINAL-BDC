@@ -506,102 +506,66 @@ def plot_top_words(df, aspect_label, color):
 
 def run_analyzer_page():
     st.markdown("""
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <style>
-    .block-container {
-        padding-top: 0rem !important;
-    }
+<style>
+.reeltalk-header {
+    background: linear-gradient(135deg, #0F172A, #1E293B);
+    padding: 22px 30px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    max-width: 95%;
+    animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-6px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+.sidebar-tip {
+    background: rgba(56,189,248,0.12);
+    border: 1px solid rgba(56,189,248,0.25);
+    color: #BAE6FD;
+    font-size: 13.8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    border-radius: 10px;
+    line-height: 1.6;
+    box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
+}
+</style>
 
-    .reeltalk-header {
-        background: linear-gradient(135deg, #0F172A, #1E293B);
-        padding: 22px 30px;
-        border-radius: 14px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.35);
-        margin-top: 30px;
-        margin-bottom: 20px;
-        font-family: 'Inter', sans-serif;
-        text-align: left;
-        max-width: 95%;
-        animation: fadeIn 0.6s ease-in-out;
-    }
+<div class="reeltalk-header">
+    <h1>🔍 ViralLens AI</h1>
+    <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(-6px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+    <p>
+        <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas —
+        dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
+        Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
+    </p>
 
-    .reeltalk-header h1 {
-        font-size: 30px;
-        font-weight: 800;
-        color: #E2E8F0;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+    <p style="margin-top: 10px;">
+        Dilengkapi dua fitur utama:
+        <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
+        <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
+    </p>
 
-    .reeltalk-header h3 {
-        font-size: 14px;
-        font-weight: 500;
-        color: #94A3B8;
-        margin-bottom: 14px;
-    }
+    <p style="margin-top: 10px;">
+        Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
+    </p>
 
-    .reeltalk-header p {
-        font-size: 14.5px;
-        line-height: 1.7;
-        color: #CBD5E1;
-        text-align: justify;
-        margin: 0;
-        max-width: 92%;
-    }
-
-    .sidebar-tip {
-        background: rgba(56,189,248,0.12);
-        border: 1px solid rgba(56,189,248,0.25);
-        color: #BAE6FD;
-        font-size: 13.8px;
-        padding: 12px 16px;
-        margin-top: 16px;
-        border-radius: 10px;
-        line-height: 1.6;
-        box-shadow: inset 0 0 10px rgba(59,130,246,0.15);
-    }
-
-    .sidebar-tip b {
-        color: #E0F2FE;
-    }
-    </style>
-
-    <div class="reeltalk-header">
-        <h1>🔍 ViralLens AI</h1>
-        <h3>✨ Lensa Pintar untuk Melihat Potensi Viral Kontenmu</h3>
-
-        <p>
-            <b>ViralLens AI</b> membantu kamu membaca performa video secara cepat dan cerdas —
-            dari <b>analisis komentar</b> dan <b>emosi audiens</b> hingga <b>tren topik</b> serta <b>waktu unggah terbaik</b>.
-            Aplikasi ini jadi panduan praktis untuk memahami faktor yang membuat konten berpotensi viral. 🚀
-        </p>
-
-        <p style="margin-top: 10px;">
-            Dilengkapi dua fitur utama:
-            <br>• <b>🎬 ReelTalk</b> — analisis mendalam komentar, aspek, performa, dan transkrip video Reels.
-            <br>• <b>📊 Dashboard Looker</b> — pantau tren, engagement, dan jam unggah paling efektif.
-        </p>
-
-        <p style="margin-top: 10px;">
-            Karena viral bukan kebetulan — tapi hasil dari memahami data dengan tepat. 💡
-        </p>
-
-        <div class="sidebar-tip">
-            💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
-            Gunakan untuk <b>berpindah halaman</b> antara 
-            <span style="color:#7DD3FC;">🎬 ReelTalk Analyzer</span> dan 
-            <span style="color:#7DD3FC;">📊 Dashboard Looker</span>.
-        </div>
+    <div class="sidebar-tip">
+        💡 <b>Menu navigasi tersedia di sidebar kiri.</b><br>
+        Gunakan untuk <b>berpindah halaman</b> antara 
+        <span style="color:#7DD3FC;">🎬 ReelTalk Analyzer</span> dan 
+        <span style="color:#7DD3FC;">📊 Dashboard Looker</span>.
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
 # ================================
 # 🎥 Input URL Instagram Reels
@@ -1331,6 +1295,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
