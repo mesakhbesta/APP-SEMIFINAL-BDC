@@ -653,28 +653,23 @@ def run_analyzer_page():
 # ================================
     st.markdown("""
     <div style='
-        margin-top: -90px;           /* 🟢 naik sedikit ke atas */
-        padding: 10px 14px;
+        margin-top: -12px;
+        padding: 8px 12px;
         border-radius: 10px;
-        background-color: rgba(241,245,249,0.08);
-        border: 1px solid rgba(148,163,184,0.25);
+        background-color: rgba(241,245,249,0.06);
+        border: 1px solid rgba(148,163,184,0.2);
     '>
-        <h4 style='margin-bottom: 4px; color:#F8FAFC; font-size:17px;'>
+        <h4 style='margin-bottom: 4px; color:#F8FAFC; font-size:15.5px;'>
             🎥 <b>Masukkan URL Instagram Reels</b>
         </h4>
-        <p style='font-size:14.2px; line-height:1.55; color:#CBD5E1; margin-bottom:5px;'>
-            Kamu bisa mencoba dengan salah satu <span style='color:#F1F5F9; font-weight:600;'>contoh video</span> di bawah ini,  
-            atau <b>masukkan link Reels kamu sendiri</b>.
-        </p>
-        <p style='font-size:13.5px; color:#FCA5A5; margin-top:2px;'>
-            ⚠️ <b>Catatan:</b> contoh ini hanya untuk <b>uji coba</b> agar kamu bisa melihat bagaimana hasil analisis tampil.  
-            Semua video lain akan dianalisis dengan cara yang sama 👇
+        <p style='font-size:13px; line-height:1.45; color:#CBD5E1; margin-bottom:3px;'>
+            Kamu bisa mencoba salah satu <span style="color:#F1F5F9; font-weight:600;">contoh video</span> di bawah  
+            atau <b>masukkan link Reels kamu sendiri</b>.  
+            <span style="color:#FCA5A5;">⚠️ Contoh ini hanya untuk uji coba — video lain dianalisis dengan cara yang sama.</span>
         </p>
     </div>
     """, unsafe_allow_html=True)
 
-
-    
     # daftar contoh video real
     contoh_reel_links = {
         "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
@@ -1382,6 +1377,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
