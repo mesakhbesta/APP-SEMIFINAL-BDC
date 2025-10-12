@@ -331,7 +331,7 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
                     client = ApifyClient(token)
                     run_input = {
                         "directUrls": [f"https://www.instagram.com/reel/{reel_id}"],
-                        "resultsLimit": 300
+                        "resultsLimit": 500
                     }
                     run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
 
@@ -1317,6 +1317,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
