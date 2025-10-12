@@ -789,7 +789,7 @@ def run_analyzer_page():
             height=280
         )
         config = {"displayModeBar": False, "responsive": True}
-        st.plotly_chart(fig_bar, width="stretch", config=config)
+        st.plotly_chart(fig_pie, width="stretch", config=config)
          
         sentiment_option = st.selectbox(
             "Pilih tampilan sentimen:",
@@ -1319,6 +1319,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
