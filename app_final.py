@@ -272,11 +272,16 @@ def get_comments_for_reel_id(reel_id: str) -> pd.DataFrame:
         # === 1️⃣ Cek data komentar di Excel lokal ===
         df = pd.read_excel(r"Data Komentar.xlsx")
         df["URL"] = df["URL"].astype(str)
+
+        # 🔹 regex baru: dukung URL dengan atau tanpa username sebelum /reel/
         df["reel_id"] = df["URL"].apply(
-            lambda x: re.search(r"/reel/([^/?]+)", x).group(1)
-            if re.search(r"/reel/([^/?]+)", x)
-            else None
+            lambda x: (
+                re.search(r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w.-]+)?/reel/([^/?#]+)", x).group(1)
+                if re.search(r"(?:https?://(?:www\.)?instagram\.com)?(?:/[\w.-]+)?/reel/([^/?#]+)", x)
+                else None
+            )
         )
+
         subset = df[df["reel_id"] == reel_id]
         if not subset.empty:
             return subset[["Comment"]].dropna().astype(str).drop_duplicates()
@@ -1219,6 +1224,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
