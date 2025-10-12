@@ -581,10 +581,54 @@ def run_analyzer_page():
     """, unsafe_allow_html=True)
 
 
-    url = st.text_input("Masukkan URL Instagram Reels:", key="url_input_main")
-
+# ================================
+    # 🎥 Input URL Instagram Reels
+    # ================================
+    st.markdown("""
+    <div style='padding: 15px; border-radius: 12px; background-color: #F1F5F9; border: 1px solid #CBD5E1;'>
+        <h3 style='margin-bottom: 6px;'>🎥 <b>Masukkan URL Instagram Reels</b></h3>
+        <p style='font-size: 15px; line-height: 1.6; margin-top: 2px;'>
+            Kamu bisa mencoba dengan salah satu <b>contoh video</b> di bawah ini,
+            atau <b>masukkan link Reels kamu sendiri</b>.  
+            <br><br>
+            <span style='color:#E11D48; font-weight:600;'>⚠️ Catatan:</span> 
+            contoh ini <b>hanya untuk uji coba</b> agar kamu bisa melihat bagaimana hasil analisis tampil.  
+            Semua video lain akan dianalisis dengan cara yang sama 👇
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # daftar contoh video real
+    contoh_reel_links = {
+        "📱 Contoh 1 — David Gadgetin (Review Tekno)": "https://www.instagram.com/reel/DHTC04Vybkk/?igsh=MXIzYmx6NXBzdzdqOQ%3D%3D",
+        "🚗 Contoh 2 — Nexcaros (Otomotif)": "https://www.instagram.com/reel/DMz1mj7s6u7/?igsh=MXQzN3ZoNWZsMGk5cg%3D%3D",
+        "🏍 Contoh 3 — Fitra Eri (Otomotif)": "https://www.instagram.com/reel/DMEz84OyvC1/?igsh=bjA5dGVkeGtxMmM1",
+    }
+    
+    col1, col2 = st.columns([1.8, 1.2])
+    
+    with col1:
+        url = st.text_input(
+            "Masukkan URL Instagram Reels:",
+            key="url_input_main",
+            placeholder="https://www.instagram.com/reel/XXXXX/",
+        )
+    
+    with col2:
+        selected_example = st.selectbox(
+            "Atau pilih contoh video:",
+            ["(Pilih salah satu contoh)"] + list(contoh_reel_links.keys()),
+            key="example_selector",
+        )
+    
+    # jika user pilih contoh, isi otomatis field input-nya
+    if selected_example != "(Pilih salah satu contoh)":
+        url = contoh_reel_links[selected_example]
+        st.info(f"🔗 Menggunakan contoh: **{selected_example}**")
+    
+    # tombol jalankan analisis
     if st.button("🚀 Jalankan Analisis Lengkap", key="run_btn"):
-        # 🔹 regex: cocokkan semua pola URL Reels (dengan atau tanpa username)
+        # cocokkan pola URL Reels (dengan atau tanpa username)
         valid_url = re.search(r"(?:instagram\.com/)(?:[\w.-]+/)?reel/([A-Za-z0-9_-]+)", url)
     
         if not valid_url:
@@ -592,12 +636,13 @@ def run_analyzer_page():
                      "- https://www.instagram.com/reel/XXXXX/\n"
                      "- https://www.instagram.com/<username>/reel/XXXXX/")
         else:
-            # 🔄 clear state untuk run baru
+            # clear state untuk run baru
             for k in list(st.session_state.keys()):
-                if k not in ["url_input_main", "nav_radio"]:
+                if k not in ["url_input_main", "nav_radio", "example_selector"]:
                     del st.session_state[k]
             st.session_state["run_new_analysis"] = True
             st.rerun()
+
 
 
     if st.session_state.get("run_new_analysis", False) and "analysis_data" not in st.session_state:
@@ -1256,6 +1301,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
