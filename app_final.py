@@ -476,7 +476,7 @@ Gunakan semua data di bawah ini untuk memahami konteks video, namun jangan menye
 - Keterangan: {ket}
 
 Gunakan bahasa Indonesia formal yang alami, informatif, dan padat makna.
-Total maksimal 400 kata.
+Total maksimal 300 kata.
 """
 
     response = client.chat.completions.create(
@@ -1319,6 +1319,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
