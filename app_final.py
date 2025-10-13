@@ -15,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import warnings
 warnings.filterwarnings("ignore", message="The keyword arguments have been deprecated")
-
+import resampy 
 # OPTIONAL: aktifkan fallback scraping komentar via Apify
 import streamlit as st
 import os
@@ -1319,6 +1319,7 @@ if page == "🎬 ReelTalk Analyzer":
 else:
 
     run_looker_page()
+
 
 
 
